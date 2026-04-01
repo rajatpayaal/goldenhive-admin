@@ -1,0 +1,106 @@
+name: Admin Panel CI/CD
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run Tests If Present
+        run: |
+          if npm run | grep -q " test"; then
+            npm test
+          else
+            echo "No test script found. Skipping tests."
+          fi
+
+      - name: Check Docker Publish Readiness
+        id: docker_ready
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          has_username=false
+          has_token=false
+          has_dockerfile=false
+
+          if [ -n "$DOCKER_USERNAME" ]; then
+            has_username=true
+          fi
+
+          if [ -n "$DOCKER_TOKEN" ]; then
+            has_token=true
+          fi
+
+          if [ -f "Dockerfile" ]; then
+            has_dockerfile=true
+          fi
+
+          echo "has_username=$has_username" >> "$GITHUB_OUTPUT"
+          echo "has_token=$has_token" >> "$GITHUB_OUTPUT"
+          echo "has_dockerfile=$has_dockerfile" >> "$GITHUB_OUTPUT"
+
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ] && [ "$has_username" = "true" ] && [ "$has_token" = "true" ] && [ "$has_dockerfile" = "true" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Show Docker Publish Decision
+        run: |
+          echo "DOCKERHUB_USERNAME set: ${{ steps.docker_ready.outputs.has_username }}"
+          echo "DOCKERHUB_TOKEN set: ${{ steps.docker_ready.outputs.has_token }}"
+          echo "Dockerfile present: ${{ steps.docker_ready.outputs.has_dockerfile }}"
+          echo "Docker publish enabled: ${{ steps.docker_ready.outputs.enabled }}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: docker build -t goldenhive-admin:ci .
+
+      - name: Run Docker Smoke Test
+        run: docker run --rm goldenhive-admin:ci nginx -v
+
+      - name: Docker Login
+        if: ${{ steps.docker_ready.outputs.enabled == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Tag Frontend Image
+        if: ${{ steps.docker_ready.outputs.enabled == 'true' }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: docker tag goldenhive-admin:ci "$DOCKER_USERNAME"/goldenhive-admin:latest
+
+      - name: Push Frontend Image
+        if: ${{ steps.docker_ready.outputs.enabled == 'true' }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: docker push "$DOCKER_USERNAME"/goldenhive-admin:latest
+
+      - name: Skip Docker Publish
+        if: ${{ steps.docker_ready.outputs.enabled != 'true' }}
+        run: echo "Docker publish skipped. Check previous step output for exact reason."

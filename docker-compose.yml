@@ -1,0 +1,10 @@
+services:
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: goldenhive-admin:local
+    container_name: goldenhive-admin
+    ports:
+      - "5173:80"
+    restart: unless-stopped
