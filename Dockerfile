@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-ARG VITE_API_URL=https://goldenhive-backend-g1xv.onrender.com
+ARG VITE_API_URL=https://goldenhive-backend-g1xv.onrender.com/api
 ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
