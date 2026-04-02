@@ -4,6 +4,16 @@ import { authAPI } from '../api/endpoints';
 const AuthContext = createContext(null);
 const AUTH_API_BASE = '/auth';
 
+const extractAuthData = (response) => {
+  const root = response?.data ?? {};
+  const data = root.data ?? root;
+  const token = data.token ?? data.accessToken ?? data.jwt ?? root.token ?? root.accessToken ?? root.jwt ?? null;
+  const user = data.user ?? root.user ?? data.profile ?? root.profile ?? null;
+  const role = (user?.role ?? data.role ?? root.role ?? '').toString().toUpperCase();
+
+  return { token, user, role, raw: response?.data };
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -31,8 +41,19 @@ export function AuthProvider({ children }) {
         email,
       });
       const res = await authAPI.login({ email, password });
-      const { token: jwt, user: userData } = res.data.data;
-      const role = (userData.role || '').toUpperCase();
+      const { token: jwt, user: userData, role, raw } = extractAuthData(res);
+      console.log('[Auth API] primary login response', {
+        hasToken: !!jwt,
+        hasUser: !!userData,
+        role,
+        responseKeys: Object.keys(raw || {}),
+      });
+      if (!jwt) {
+        throw new Error('Token not found in login response.');
+      }
+      if (!userData) {
+        throw new Error('User data not found in login response.');
+      }
       if (role !== 'ADMIN' && role !== 'SALES_AGENT') {
         throw new Error('Access denied. Admin or Sales Agent role required.');
       }
@@ -56,8 +77,18 @@ export function AuthProvider({ children }) {
           email,
         });
         const res = await authAPI.adminLogin({ email, password });
-        const { token: jwt, email: userEmail, role } = res.data.data;
+        const { token: jwt, user: userDataFromResponse, role, raw } = extractAuthData(res);
+        const userEmail = userDataFromResponse?.email ?? raw?.data?.email ?? raw?.email ?? email;
         const normalizedRole = (role || '').toUpperCase();
+        console.log('[Auth API] fallback login response', {
+          hasToken: !!jwt,
+          hasUser: !!userDataFromResponse,
+          role: normalizedRole,
+          responseKeys: Object.keys(raw || {}),
+        });
+        if (!jwt) {
+          throw new Error('Token not found in admin login response.');
+        }
         if (normalizedRole !== 'ADMIN' && normalizedRole !== 'SALES_AGENT') {
           throw new Error('Access denied.');
         }
