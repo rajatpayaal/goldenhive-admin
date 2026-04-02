@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const DEFAULT_API_URL = 'https://goldenhive-backend-g1xv.onrender.com/api';
+
 const normalizeApiBase = (url) => {
-  if (!url) return 'http://localhost:8000/api';
+  if (!url) return DEFAULT_API_URL;
   const trimmed = url.replace(/\/+$/, '');
   return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
 };

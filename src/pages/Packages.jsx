@@ -4,6 +4,7 @@ import { packagesAPI } from '../api/endpoints';
 import toast from 'react-hot-toast';
 
 const TABS = ['Basic Info', 'Hero & Gallery', 'Overview', 'Itinerary', 'Pricing', 'Hotel & Travel', 'SEO & Policies'];
+const PACKAGE_API_BASE = '/packages-v2';
 
 const emptyForm = {
   name: '', slug: '', tagline: '', destination: '', durationDays: 1, nights: 0,
@@ -39,10 +40,19 @@ export default function Packages() {
   const [existingHeroUrl, setExistingHeroUrl] = useState('');
   const [existingGallery, setExistingGallery] = useState([]);
 
+  const logPackageApiHit = (method, path, meta) => {
+    console.log('[Packages API]', {
+      method,
+      endpoint: `${PACKAGE_API_BASE}${path}`,
+      ...(meta || {}),
+    });
+  };
+
   useEffect(() => { loadPackages(); }, []);
 
   const loadPackages = async () => {
     try {
+      logPackageApiHit('GET', '');
       const res = await packagesAPI.list();
       setPackages(res.data.data || []);
     } catch { toast.error('Failed to load packages'); }
@@ -161,9 +171,11 @@ export default function Packages() {
       galleryFiles.forEach(f => fd.append('gallery', f));
 
       if (drawerMode === 'create') {
+        logPackageApiHit('POST', '', { action: 'create' });
         await packagesAPI.create(fd);
         toast.success('Package created!');
       } else {
+        logPackageApiHit('PUT', `/${editId}`, { action: 'update', id: editId });
         await packagesAPI.update(editId, fd);
         toast.success('Package updated!');
       }
@@ -177,6 +189,7 @@ export default function Packages() {
   const handleDelete = async (id) => {
     if (!confirm('Delete this package permanently?')) return;
     try {
+      logPackageApiHit('DELETE', `/${id}`, { action: 'delete', id });
       await packagesAPI.delete(id);
       toast.success('Package deleted');
       loadPackages();
