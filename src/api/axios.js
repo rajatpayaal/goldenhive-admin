@@ -3,12 +3,28 @@ import axios from 'axios';
 const DEFAULT_API_URL = 'https://goldenhive-backend-g1xv.onrender.com/api';
 
 const normalizeApiBase = (url) => {
-  if (!url) return DEFAULT_API_URL;
-  const trimmed = url.replace(/\/+$/, '');
-  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+  if (!url || typeof url !== 'string') return DEFAULT_API_URL;
+
+  const candidate = url.trim();
+  if (!/^https?:\/\//i.test(candidate)) return DEFAULT_API_URL;
+
+  try {
+    const parsed = new URL(candidate);
+    const pathname = parsed.pathname.replace(/\/+$/, '');
+    parsed.pathname = pathname.endsWith('/api') ? pathname : `${pathname}/api`;
+    parsed.search = '';
+    parsed.hash = '';
+    return parsed.toString().replace(/\/+$/, '');
+  } catch {
+    return DEFAULT_API_URL;
+  }
 };
 
 const API_BASE = normalizeApiBase(import.meta.env.VITE_API_URL);
+
+if (typeof window !== 'undefined') {
+  console.info('[API] base url resolved', API_BASE);
+}
 
 const api = axios.create({
   baseURL: API_BASE,
