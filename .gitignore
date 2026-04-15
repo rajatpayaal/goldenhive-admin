@@ -12,11 +12,10 @@ dist
 dist-ssr
 
 # env files
-.env
-.env.*
-!.env.example
-!.env.production
-*.local
+# Keep a single tracked `.env` (non-secret in this project: only API base URL).
+# If you add secrets later, revert this and use Vercel env vars instead.
+.env.local
+.env.*.local
 
 # Editor directories and files
 .vscode/*
