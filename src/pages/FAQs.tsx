@@ -62,7 +62,7 @@ const FAQsPage: React.FC = () => {
       ) : (
         <div className="space-y-3">
           {faqs.length === 0 && (
-            <div className="card p-10 text-center text-slate-500">No FAQs yet. Add your first one!</div>
+            <div className="card p-10 text-center text-text-tertiary">No FAQs yet. Add your first one!</div>
           )}
           {faqs.map((faq) => (
             <div key={faq._id} className="card overflow-hidden">
@@ -70,19 +70,19 @@ const FAQsPage: React.FC = () => {
                 className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-border/30 transition"
                 onClick={() => setExpanded(expanded === faq._id ? null : faq._id)}
               >
-                <span className="font-semibold text-sm text-slate-100">{faq.question}</span>
+                <span className="font-semibold text-sm text-text-primary">{faq.question}</span>
                 <div className="flex items-center gap-2 shrink-0 ml-4">
                   <button onClick={(e) => { e.stopPropagation(); openEdit(faq) }} className="btn-ghost btn-icon btn-sm">
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); setDeleteId(faq._id) }} className="btn-ghost btn-icon btn-sm text-red-400">
+                  <button onClick={(e) => { e.stopPropagation(); setDeleteId(faq._id) }} className="btn-ghost btn-icon btn-sm text-danger-400">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
-                  {expanded === faq._id ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />}
+                  {expanded === faq._id ? <ChevronUp className="w-4 h-4 text-text-tertiary" /> : <ChevronDown className="w-4 h-4 text-text-tertiary" />}
                 </div>
               </button>
               {expanded === faq._id && (
-                <div className="px-5 pb-4 text-sm text-slate-400 border-t border-surface-border pt-3">
+                <div className="px-5 pb-4 text-sm text-text-tertiary border-t border-surface-border pt-3">
                   {faq.answer}
                 </div>
               )}
@@ -96,7 +96,7 @@ const FAQsPage: React.FC = () => {
           <div>
             <label className="label">Question *</label>
             <input {...register('question', { required: 'Required' })} className={`input ${errors.question ? 'input-error' : ''}`} />
-            {errors.question && <p className="text-red-400 text-xs mt-1">{errors.question.message}</p>}
+            {errors.question && <p className="text-danger-400 text-xs mt-1">{errors.question.message}</p>}
           </div>
           <div>
             <label className="label">Answer *</label>

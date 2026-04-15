@@ -2,18 +2,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useNavigate } from 'react-router-dom'
 import {
   Plus, Trash2, Upload, X, Eye, EyeOff, ChevronDown, ChevronUp,
   GripVertical,
 } from 'lucide-react'
 import {
-  fetchPackages, createPackage, updatePackage, deletePackage,
+  fetchPackages, deletePackage,
   fetchCategories, fetchCountries, fetchStates, fetchCities,
-} from '../services/api.service'
-import DataTable from '../components/ui/DataTable'
-import Modal from '../components/ui/Modal'
-import StatusBadge from '../components/ui/StatusBadge'
-import { PageHeader, Spinner, ConfirmDialog, Toggle } from '../components/ui'
+} from './service'
+import DataTable from '../../components/ui/DataTable'
+import StatusBadge from '../../components/ui/StatusBadge'
+import { PageHeader, Spinner, ConfirmDialog, Toggle } from '../../components/ui'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 
@@ -144,19 +144,27 @@ const VISIBILITY_KEYS = [
   { key: 'visibilityFaq',       label: 'FAQs' },
 ] as const
 
+const normalizeList = (payload: any) => {
+  if (!payload) return []
+  if (Array.isArray(payload)) return payload
+  if (Array.isArray(payload.data)) return payload.data
+  if (Array.isArray(payload.items)) return payload.items
+  return []
+}
+
 // ─── Section Wrapper ───────────────────────────────────────────────
 const Section: React.FC<{ title: string; children: React.ReactNode; collapsible?: boolean }> = ({
   title, children, collapsible = false,
 }) => {
   const [open, setOpen] = useState(!collapsible)
   return (
-    <div className="form-section">
+    <div className="space-y-4 rounded-3xl border border-surface-border bg-surface-card/80 p-5 shadow-sm">
       <div
         className={`flex items-center justify-between ${collapsible ? 'cursor-pointer' : ''}`}
         onClick={() => collapsible && setOpen(!open)}
       >
-        <h4 className="text-sm font-bold text-slate-200">{title}</h4>
-        {collapsible && (open ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />)}
+        <h4 className="text-sm font-semibold text-text-secondary">{title}</h4>
+        {collapsible && (open ? <ChevronUp className="w-4 h-4 text-text-tertiary" /> : <ChevronDown className="w-4 h-4 text-text-tertiary" />)}
       </div>
       {open && children}
     </div>
@@ -197,13 +205,17 @@ const PackageForm: React.FC<{
   const discountP = watch('discountPercent')
   const finalPrice = Math.max(0, (Number(basePrice) || 0) * (1 - (Number(discountP) || 0) / 100))
 
-  useEffect(() => { fetchCategories().then(r => setCategories(r.data?.data || r.data?.items || [])) }, [])
-  useEffect(() => { fetchCountries().then(r => setCountries(r.data?.data || r.data?.items || [])) }, [])
   useEffect(() => {
-    if (countryId) fetchStates(countryId).then(r => setStates(r.data?.data || r.data?.items || []))
+    fetchCategories().then((r) => setCategories(normalizeList(r.data?.data || r.data?.items || r.data || [])))
+  }, [])
+  useEffect(() => {
+    fetchCountries().then((r) => setCountries(normalizeList(r.data?.data || r.data?.items || r.data || [])))
+  }, [])
+  useEffect(() => {
+    if (countryId) fetchStates(countryId).then((r) => setStates(normalizeList(r.data?.data || r.data?.items || r.data || [])))
   }, [countryId])
   useEffect(() => {
-    if (stateId) fetchCities(stateId).then(r => setCities(r.data?.data || r.data?.items || []))
+    if (stateId) fetchCities(stateId).then((r) => setCities(normalizeList(r.data?.data || r.data?.items || r.data || [])))
   }, [stateId])
 
   const handleSubmitForm = (data: FormData) => {
@@ -212,37 +224,40 @@ const PackageForm: React.FC<{
 
   const F = ({ name, label, type = 'text', placeholder = '' }: any) => (
     <div>
-      <label className="label">{label}</label>
+      <label className="mb-2 block text-sm font-medium text-text-secondary">{label}</label>
       <input
         type={type}
         {...register(name)}
         placeholder={placeholder}
-        className={`input ${(errors as any)[name] ? 'input-error' : ''}`}
+        className={`w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 ${(errors as any)[name] ? 'border-danger-500 focus:ring-danger-500/20' : ''}`}
       />
-      {(errors as any)[name] && <p className="text-red-400 text-xs mt-1">{(errors as any)[name]?.message}</p>}
+      {(errors as any)[name] && <p className="text-danger-500 text-xs mt-1">{(errors as any)[name]?.message}</p>}
     </div>
   )
 
   const TA = ({ name, label, rows = 3, placeholder = '' }: any) => (
     <div>
-      <label className="label">{label}</label>
+      <label className="mb-2 block text-sm font-medium text-text-secondary">{label}</label>
       <textarea
         {...register(name)}
         rows={rows}
         placeholder={placeholder}
-        className="input resize-none"
+        className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 resize-none"
       />
     </div>
   )
 
   const Select = ({ name, label, options, required }: any) => (
     <div>
-      <label className="label">{label}{required && ' *'}</label>
-      <select {...register(name)} className={`input ${(errors as any)[name] ? 'input-error' : ''}`}>
+      <label className="mb-2 block text-sm font-medium text-text-secondary">{label}{required && ' *'}</label>
+      <select
+        {...register(name)}
+        className={`w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 ${(errors as any)[name] ? 'border-danger-500 focus:ring-danger-500/20' : ''}`}
+      >
         <option value="">Select {label}</option>
         {options.map((o: any) => <option key={o._id || o.value} value={o._id || o.value}>{o.name || o.label}</option>)}
       </select>
-      {(errors as any)[name] && <p className="text-red-400 text-xs mt-1">{(errors as any)[name]?.message}</p>}
+      {(errors as any)[name] && <p className="text-danger-500 text-xs mt-1">{(errors as any)[name]?.message}</p>}
     </div>
   )
 
@@ -275,16 +290,16 @@ const PackageForm: React.FC<{
           <F name="nights" label="Nights" type="number" />
           <F name="currency" label="Currency" placeholder="INR, USD" />
           <div>
-            <label className="label">Base Price</label>
-            <input type="number" {...register('basePrice')} className="input" />
+            <label className="mb-2 block text-sm font-medium text-text-secondary">Base Price</label>
+            <input type="number" {...register('basePrice')} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20" />
           </div>
           <div>
-            <label className="label">Discount (%)</label>
-            <input type="number" {...register('discountPercent')} className="input" />
+            <label className="mb-2 block text-sm font-medium text-text-secondary">Discount (%)</label>
+            <input type="number" {...register('discountPercent')} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20" />
           </div>
           <div>
-            <label className="label">Final Price (Auto)</label>
-            <div className="input bg-surface-border/30 text-emerald-400 font-bold">
+            <label className="mb-2 block text-sm font-medium text-text-secondary">Final Price (Auto)</label>
+            <div className="rounded-2xl border border-surface-border bg-surface-border/30 px-4 py-3 text-sm font-bold text-success-500">
               {watch('currency')} {finalPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
             </div>
           </div>
@@ -305,7 +320,7 @@ const PackageForm: React.FC<{
       <Section title="Media Artifacts">
         <div className="space-y-4">
           <div>
-            <label className="label">Primary Catalog Image</label>
+            <label className="mb-2 block text-sm font-medium text-slate-200">Primary Catalog Image</label>
             <div
               onClick={() => primaryRef.current?.click()}
               className="border-2 border-dashed border-surface-border rounded-xl p-6 text-center cursor-pointer hover:border-brand-500/50 transition-colors"
@@ -323,7 +338,7 @@ const PackageForm: React.FC<{
           </div>
 
           <div>
-            <label className="label">Carousel / Gallery Images</label>
+            <label className="mb-2 block text-sm font-medium text-slate-200">Carousel / Gallery Images</label>
             <div
               onClick={() => galleryRef.current?.click()}
               className="border-2 border-dashed border-surface-border rounded-xl p-4 cursor-pointer hover:border-brand-500/50 transition-colors"
@@ -400,31 +415,31 @@ const PackageForm: React.FC<{
               <div className="flex items-center gap-2">
                 <GripVertical className="w-4 h-4 text-slate-600 cursor-grab" />
                 <span className="text-xs font-bold text-brand-400">Chronological Day {index + 1}</span>
-                <button type="button" onClick={() => remove(index)} className="ml-auto btn-icon btn-danger btn-sm">
+                <button type="button" onClick={() => remove(index)} className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-xl bg-red-500 text-white transition hover:bg-red-400">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="label">Itinerary Title *</label>
-                  <input {...register(`itinerary.${index}.title`)} placeholder="e.g. Arrival at Goa Airport" className="input" />
+                  <label className="mb-2 block text-sm font-medium text-slate-200">Itinerary Title *</label>
+                  <input {...register(`itinerary.${index}.title`)} placeholder="e.g. Arrival at Goa Airport" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div>
-                  <label className="label">Meals Handled</label>
-                  <input {...register(`itinerary.${index}.meals`)} placeholder="e.g. Breakfast, Dinner" className="input" />
+                  <label className="mb-2 block text-sm font-medium text-slate-200">Meals Handled</label>
+                  <input {...register(`itinerary.${index}.meals`)} placeholder="e.g. Breakfast, Dinner" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div>
-                  <label className="label">Stay Details</label>
-                  <input {...register(`itinerary.${index}.stay`)} placeholder="Hotel check-in details" className="input" />
+                  <label className="mb-2 block text-sm font-medium text-slate-200">Stay Details</label>
+                  <input {...register(`itinerary.${index}.stay`)} placeholder="Hotel check-in details" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="label">Action Log / Description</label>
-                  <textarea {...register(`itinerary.${index}.description`)} rows={2} className="input resize-none" />
+                  <label className="mb-2 block text-sm font-medium text-slate-200">Action Log / Description</label>
+                  <textarea {...register(`itinerary.${index}.description`)} rows={2} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 resize-none" />
                 </div>
               </div>
             </div>
           ))}
-          <button type="button" onClick={() => append({ day: fields.length + 1, title: '', meals: '', stay: '', description: '' })} className="btn-secondary btn-sm w-full">
+          <button type="button" onClick={() => append({ day: fields.length + 1, title: '', meals: '', stay: '', description: '' })} className="inline-flex w-full items-center justify-center rounded-xl border border-surface-border bg-surface-card px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-surface-muted">
             <Plus className="w-4 h-4" /> Add Next Itinerary Node
           </button>
         </div>
@@ -486,14 +501,12 @@ const PackageForm: React.FC<{
 
 // ─── Packages Page ─────────────────────────────────────────────────
 const PackagesPage: React.FC = () => {
+  const navigate = useNavigate()
   const [packages, setPackages] = useState<any[]>([])
   const [loading, setLoading]   = useState(true)
   const [page, setPage]         = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [search, setSearch]     = useState('')
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editing, setEditing]   = useState<any>(null)
-  const [saving, setSaving]     = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [deleting, setDeleting] = useState(false)
 
@@ -501,9 +514,10 @@ const PackagesPage: React.FC = () => {
     setLoading(true)
     fetchPackages({ page, limit: 10, search: search || undefined })
       .then((res) => {
-        const d = res.data?.data || res.data
-        setPackages(d?.items || [])
-        setTotalPages(d?.totalPages || 1)
+        const payload = res.data?.data || res.data
+        const list = Array.isArray(payload) ? payload : payload?.items || []
+        setPackages(list)
+        setTotalPages(Array.isArray(payload) ? 1 : payload?.totalPages || 1)
       })
       .finally(() => setLoading(false))
   }
@@ -513,58 +527,6 @@ const PackagesPage: React.FC = () => {
   const flattenArray = (arr: any) => {
       if (!arr || !Array.isArray(arr)) return ''
       return JSON.stringify(arr)
-  }
-
-  const handleSubmit = async (data: any, primaryImage?: File, gallery?: File[]) => {
-    setSaving(true)
-    try {
-      const fd = new FormData()
-
-      // Flatten form data into FormData mapping exactly to backend payload builder `buildPackagePayload`
-      const payloadKeys = Object.keys(data)
-      payloadKeys.forEach(k => {
-         // arrays
-         if (['tags', 'heroBadges', 'whyChooseUs', 'highlights', 'inclusions', 'exclusions', 'keywords'].includes(k)) {
-             try {
-                 const arr = (data[k] || '').split(',').map((s: string) => s.trim()).filter(Boolean)
-                 fd.append(k, JSON.stringify(arr))
-             } catch {
-                 fd.append(k, '[]')
-             }
-         } else if (k === 'itinerary') {
-             fd.append(k, JSON.stringify(data[k]))
-         } else if (typeof data[k] === 'boolean') {
-             fd.append(k, data[k] ? 'true' : 'false')
-         } else if (data[k] !== undefined && data[k] !== '') {
-             fd.append(k, String(data[k]))
-         }
-      })
-
-      // Backend explicitly expects these naming conversions for `pricing.` object
-      const fp = Math.max(0, (Number(data.basePrice) || 0) * (1 - (Number(data.discountPercent) || 0) / 100))
-      fd.append('finalPrice', String(fp))
-      fd.append('pricingBasePrice', String(data.basePrice))
-      fd.append('pricingDiscountPercent', String(data.discountPercent))
-      fd.append('pricingFinalPrice', String(fp))
-
-      if (primaryImage) fd.append('primaryImage', primaryImage)
-      if (gallery) gallery.forEach((f) => fd.append('gallery', f))
-
-      if (editing) {
-        await updatePackage(editing._id, fd)
-        toast.success('Package rules updated!')
-      } else {
-        await createPackage(fd)
-        toast.success('Generated new Package layout!')
-      }
-      setModalOpen(false)
-      setEditing(null)
-      loadPackages()
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to apply package rules')
-    } finally {
-      setSaving(false)
-    }
   }
 
   const handleDelete = async () => {
@@ -588,7 +550,7 @@ const PackagesPage: React.FC = () => {
             <img src={r.images.primary.url} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" />
           )}
           <div>
-            <p className="font-semibold text-sm text-slate-100">{r.basic?.name}</p>
+            <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">{r.basic?.name}</p>
             <p className="text-xs text-brand-400 font-medium">{r.packageCode}</p>
           </div>
         </div>
@@ -613,116 +575,44 @@ const PackagesPage: React.FC = () => {
       render: (r: any) => (
         <div className="flex items-center gap-2">
           <button
-            onClick={() => { 
-                const mapped = {
-                    name:            r.basic?.name,
-                    slug:            r.basic?.slug,
-                    categoryId:      String(r.categoryId?._id || r.categoryId || ''),
-                    countryId:       String(r.countryId?._id  || r.countryId  || ''),
-                    stateId:         String(r.stateId?._id    || r.stateId    || ''),
-                    cityId:          String(r.cityId?._id     || r.cityId     || ''),
-                    tagline:         r.basic?.tagline,
-                    destination:     r.basic?.destination,
-                    durationDays:    r.basic?.durationDays,
-                    nights:          r.basic?.nights,
-                    basePrice:       r.basic?.basePrice,
-                    discountPercent: r.basic?.discount,
-                    currency:        r.basic?.currency || 'INR',
-                    tags:            (r.basic?.tags || []).join(', '),
-                    
-                    heroTitle:       r.hero?.title,
-                    heroSubtitle:    r.hero?.subtitle,
-                    heroBadges:      (r.hero?.badges || []).join(', '),
-                    heroCtaText:     r.hero?.ctaText,
-                    
-                    pickup:          r.quickInfo?.pickup,
-                    drop:            r.quickInfo?.drop,
-                    meals:           r.quickInfo?.meals,
-                    stay:            r.quickInfo?.stay,
-                    transport:       r.quickInfo?.transport,
-                    difficulty:      r.quickInfo?.difficulty,
-                    timing:          r.quickInfo?.timing,
-                    quickDuration:   r.quickInfo?.duration,
-                    ageLimit:        r.quickInfo?.ageLimit,
-                    bestTime:        r.quickInfo?.bestTime,
-                    groupSize:       r.quickInfo?.groupSize,
-                    language:        r.quickInfo?.language,
-                    guide:           r.quickInfo?.guide,
-
-                    overviewShort:   r.overview?.short,
-                    overviewLong:    r.overview?.long,
-                    address:         r.location?.address,
-                    mapUrl:          r.location?.mapUrl,
-                    
-                    whyChooseUs:     (r.whyChooseUs || []).join(', '),
-                    highlights:      (r.highlights || []).join(', '),
-                    inclusions:      (r.inclusions || []).join(', '),
-                    exclusions:      (r.exclusions || []).join(', '),
-                    
-                    travelBestTime:  r.travelInfo?.bestTime,
-                    temperature:     r.travelInfo?.temperature,
-                    clothing:        r.travelInfo?.clothing,
-                    
-                    cancellation:    r.policies?.cancellation,
-                    refund:          r.policies?.refund,
-                    terms:           r.policies?.terms,
-
-                    whatsapp:        r.cta?.whatsapp,
-                    call:            r.cta?.call,
-                    metaTitle:       r.seo?.metaTitle,
-                    metaDescription: r.seo?.metaDescription,
-                    keywords:        (r.seo?.keywords || []).join(', '),
-
-                    status:          r.meta?.status || 'ACTIVE',
-                    itinerary:       r.itinerary || [],
-                    
-                    visibilityTagline:      Boolean(r.visibility?.tagline ?? true),
-                    visibilityPricing:      Boolean(r.visibility?.pricing ?? true),
-                    visibilityStats:        Boolean(r.visibility?.stats ?? true),
-                    visibilityHero:         Boolean(r.visibility?.hero ?? true),
-                    visibilityGallery:      Boolean(r.visibility?.gallery ?? true),
-                    visibilityQuickInfo:    Boolean(r.visibility?.quickInfo ?? true),
-                    visibilityOverview:     Boolean(r.visibility?.overview ?? true),
-                    visibilityWhyChooseUs:  Boolean(r.visibility?.whyChooseUs ?? true),
-                    visibilityHighlights:   Boolean(r.visibility?.highlights ?? true),
-                    visibilityInclusions:   Boolean(r.visibility?.inclusions ?? true),
-                    visibilityExclusions:   Boolean(r.visibility?.exclusions ?? true),
-                    visibilityItinerary:    Boolean(r.visibility?.itinerary ?? true),
-                    visibilitySuggestions:  Boolean(r.visibility?.suggestions ?? true),
-                    visibilityHotelDetails: Boolean(r.visibility?.hotelDetails ?? true),
-                    visibilityReviews:      Boolean(r.visibility?.reviews ?? true),
-                    visibilityFaq:          Boolean(r.visibility?.faq ?? true),
-                }
-                setEditing({ _id: r._id, ...mapped })
-                setModalOpen(true) 
-            }}
-            className="btn-secondary btn-sm"
-          >Edit Logic</button>
-          <button onClick={() => setDeleteId(r._id)} className="btn-danger btn-sm"><Trash2 className="w-3.5 h-3.5" /></button>
+            onClick={() => navigate(`/packages/${r._id}/edit`)}
+            className="inline-flex items-center justify-center rounded-xl border border-surface-border bg-surface-card px-3 py-2 text-sm font-semibold text-slate-900 dark:text-slate-100 transition hover:bg-surface-muted"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => setDeleteId(r._id)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-red-500 text-white transition hover:bg-red-400"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
         </div>
       ),
     },
   ]
 
   return (
-    <div className="page">
+    <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8">
       <PageHeader
         title="Package Registry"
         subtitle="Full schema access over dynamic package data models."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Packages' }]}
         action={
-          <button className="btn-primary" onClick={() => { setEditing(null); setModalOpen(true) }}>
+          <button
+            className="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-400"
+            onClick={() => navigate('/packages/new')}
+          >
             <Plus className="w-4 h-4" /> Instantiate New Package
           </button>
         }
       />
 
-      <div className="card p-4 flex items-center gap-3">
+      <div className="rounded-3xl border border-surface-border bg-surface-card p-4 shadow-sm">
         <input
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1) }}
           placeholder="Query package namespace..."
-          className="input max-w-xs"
+          className="w-full max-w-xs rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-900 dark:text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30"
         />
       </div>
 
@@ -736,24 +626,6 @@ const PackagesPage: React.FC = () => {
         onPageChange={setPage}
         emptyMessage="No packages located in database payload."
       />
-
-      <Modal
-        open={modalOpen}
-        onClose={() => { setModalOpen(false); setEditing(null) }}
-        title={editing ? 'System Configuration: Edit Package' : 'System Configuration: Create Package'}
-        size="2xl"
-      >
-         <div className="mb-4 bg-blue-500/10 border border-blue-500/20 p-3 rounded-lg flex items-center gap-3 text-sm text-blue-200">
-            <span className="font-bold uppercase tracking-wider text-[10px] bg-blue-500/20 py-0.5 px-2 rounded">Notice</span>
-            Schema uses comma-separated configuration fields for arrays (Tags, Highlights, Restrictions).
-         </div>
-
-        <PackageForm
-          defaultValues={editing || undefined}
-          onSubmit={handleSubmit}
-          saving={saving}
-        />
-      </Modal>
 
       <ConfirmDialog
         open={Boolean(deleteId)}

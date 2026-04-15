@@ -1,5 +1,7 @@
 import { create } from 'zustand'
 import api from '../services/apiService'
+import { API_ENDPOINTS } from '../services/api.endpoints'
+import { loginWithEmail } from '../pages/Login/service'
 
 export interface AuthUser {
   id: string
@@ -26,13 +28,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (email, password) => {
     set({ isLoading: true })
     try {
-      let res
-      try {
-        res = await api.post('/auth/admin/login', { email, password })
-      } catch {
-        res = await api.post('/auth/login', { email, password })
-      }
-      const { token, user } = res.data.data || res.data
+      const res = await loginWithEmail(email, password)
+      const payload = res.data?.data || res.data
+      const token = payload?.token
+      const user = payload?.user || payload
+      if (!token) throw new Error('Login response did not include a token')
       localStorage.setItem('gh_admin_token', token)
       set({ token, user, isLoading: false })
     } catch (err) {

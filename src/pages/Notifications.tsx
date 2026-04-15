@@ -7,8 +7,8 @@ import { format } from 'date-fns'
 
 const typeIcon: Record<string, React.ReactNode> = {
   INFO:    <Info className="w-4 h-4 text-blue-400" />,
-  WARNING: <AlertTriangle className="w-4 h-4 text-amber-400" />,
-  SUCCESS: <CheckCircle className="w-4 h-4 text-emerald-400" />,
+  WARNING: <AlertTriangle className="w-4 h-4 text-warning-400" />,
+  SUCCESS: <CheckCircle className="w-4 h-4 text-success-400" />,
 }
 
 const NotificationsPage: React.FC = () => {
@@ -59,8 +59,8 @@ const NotificationsPage: React.FC = () => {
         </div>
       ) : notis.length === 0 ? (
         <div className="card p-16 text-center">
-          <Bell className="w-12 h-12 text-slate-700 mx-auto mb-3" />
-          <p className="text-slate-500">No notifications yet</p>
+          <Bell className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
+          <p className="text-text-tertiary">No notifications yet</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -71,11 +71,11 @@ const NotificationsPage: React.FC = () => {
                           ${!n.isRead ? 'border-l-2 border-l-brand-500' : 'opacity-60'}`}
             >
               <div className="mt-0.5 shrink-0">
-                {typeIcon[n.type] || <Bell className="w-4 h-4 text-slate-500" />}
+                {typeIcon[n.type] || <Bell className="w-4 h-4 text-text-tertiary" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className={`text-sm ${n.isRead ? 'text-slate-400' : 'text-slate-100 font-medium'}`}>{n.message}</p>
-                <p className="text-xs text-slate-500 mt-1">{format(new Date(n.createdAt), 'dd MMM yyyy, HH:mm')}</p>
+                <p className={`text-sm ${n.isRead ? 'text-text-tertiary' : 'text-text-primary font-medium'}`}>{n.message}</p>
+                <p className="text-xs text-text-tertiary mt-1">{format(new Date(n.createdAt), 'dd MMM yyyy, HH:mm')}</p>
               </div>
               {!n.isRead && (
                 <button onClick={() => handleMarkRead(n._id)} className="btn-ghost btn-sm text-xs shrink-0">

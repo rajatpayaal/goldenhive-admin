@@ -8,7 +8,7 @@ const AppLayout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-panel-grid">
+    <div className="min-h-screen bg-bg-primary">
       <div className="flex min-h-screen">
         <Sidebar
           collapsed={collapsed}

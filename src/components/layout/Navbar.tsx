@@ -15,33 +15,33 @@ const Navbar: React.FC<NavbarProps> = ({ collapsed, onToggleSidebar, onToggleMob
   const { resolved, toggle } = useTheme()
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-surface-border/70 bg-surface/75 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-surface-border bg-surface/95 px-4 backdrop-blur-md sm:px-6 lg:px-8">
       <button
         onClick={onToggleMobile}
-        className="rounded-lg p-2 text-mutedFg hover:bg-surface-muted hover:text-fg lg:hidden"
+        className="rounded-lg p-2 text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors lg:hidden"
       >
         <Menu className="h-5 w-5" />
       </button>
 
       <button
         onClick={onToggleSidebar}
-        className="hidden rounded-lg p-2 text-mutedFg transition-colors hover:bg-surface-muted hover:text-fg lg:inline-flex"
+        className="hidden rounded-lg p-2 text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary lg:inline-flex"
         title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         <PanelLeftClose className={`h-5 w-5 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
       </button>
 
       <div className="relative hidden max-w-md flex-1 md:block">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mutedFg/80" />
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary" />
         <input
           type="text"
           placeholder="Search users, bookings, packages"
-          className="w-full rounded-xl border border-surface-border bg-surface-card/60 py-2 pl-9 pr-3 text-sm text-fg placeholder-mutedFg/70 outline-none ring-brand-400/30 transition focus:ring"
+          className="w-full rounded-lg border border-surface-border bg-surface-card/60 py-2 pl-9 pr-3 text-sm text-text-primary placeholder-text-tertiary outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 transition"
         />
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <div className="hidden items-center gap-2 rounded-lg border border-surface-border bg-surface-card/60 px-2.5 py-1.5 text-xs text-mutedFg md:flex">
+        <div className="hidden items-center gap-2 rounded-lg border border-surface-border bg-surface-card/60 px-2.5 py-1.5 text-xs text-text-secondary md:flex">
           <Command className="h-3.5 w-3.5" />
           <span>Quick Actions</span>
         </div>
@@ -49,7 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ collapsed, onToggleSidebar, onToggleMob
         <button
           type="button"
           onClick={toggle}
-          className="rounded-lg p-2 text-mutedFg transition-colors hover:bg-surface-muted hover:text-fg"
+          className="rounded-lg p-2 text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
           title={resolved === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
         >
           {resolved === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -57,23 +57,23 @@ const Navbar: React.FC<NavbarProps> = ({ collapsed, onToggleSidebar, onToggleMob
 
         <a
           href="/notifications"
-          className="relative rounded-lg p-2 text-mutedFg transition-colors hover:bg-surface-muted hover:text-fg"
+          className="relative rounded-lg p-2 text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
         >
           <Bell className="h-4 w-4" />
           {notificationCount > 0 && (
-            <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-brand-500 ring-2 ring-surface" />
+            <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-danger-500 ring-2 ring-surface" />
           )}
         </a>
 
         <div className="flex items-center gap-2 border-l border-surface-border pl-2">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-amber-500 text-xs font-bold text-white">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-teal-500 text-xs font-bold text-white">
             {user?.firstName?.[0]?.toUpperCase() || 'A'}
           </div>
           <div className="hidden sm:block">
-            <p className="text-xs font-semibold leading-tight text-fg">
+            <p className="text-xs font-semibold leading-tight text-text-primary">
               {user?.firstName || 'Admin'} {user?.lastName || ''}
             </p>
-            <p className="text-[10px] text-mutedFg">{String(user?.role || 'ADMIN').toUpperCase()}</p>
+            <p className="text-[10px] text-text-tertiary">{String(user?.role || 'ADMIN').toUpperCase()}</p>
           </div>
         </div>
       </div>

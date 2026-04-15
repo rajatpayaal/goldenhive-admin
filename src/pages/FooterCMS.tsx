@@ -305,19 +305,19 @@ const FooterCMSPage: React.FC = () => {
       header: 'Locale Configuration',
       render: (row: any) => (
         <div>
-          <p className="font-semibold text-slate-100 flex items-center gap-2">
+          <p className="font-semibold text-text-primary flex items-center gap-2">
              <span className="uppercase text-brand-400 font-bold tracking-widest">{row.languageCode}</span>
-             <span className="text-slate-500">/</span>
+             <span className="text-text-tertiary">/</span>
              <span className="uppercase">{row.regionCode}</span>
           </p>
-          <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{row.branding?.description || 'No branding description'}</p>
+          <p className="text-xs text-text-tertiary mt-0.5 line-clamp-1">{row.branding?.description || 'No branding description'}</p>
         </div>
       ),
     },
     {
        header: 'Link Data',
        render: (row: any) => (
-         <div className="flex flex-col gap-1 text-xs text-slate-300">
+         <div className="flex flex-col gap-1 text-xs text-text-secondary">
            <span>{row.footerColumns?.length || 0} Columns</span>
            <span>{row.seoLinkTabs?.length || 0} SEO Tabs</span>
          </div>
@@ -393,13 +393,13 @@ const FooterCMSPage: React.FC = () => {
              <div className="col-span-2 flex items-end pb-2">
                <label className="flex items-center gap-3 cursor-pointer">
                  <Toggle checked={form.isActive} onChange={(v) => setForm(p => ({ ...p, isActive: v }))} />
-                 <span className="text-sm font-medium text-slate-200">Global Activation</span>
+                 <span className="text-sm font-medium text-text-secondary">Global Activation</span>
                </label>
              </div>
           </div>
 
-          <div className="p-4 border border-white/10 bg-black/30 rounded-xl space-y-4">
-            <h3 className="text-xs font-bold text-slate-400 border-b border-white/10 pb-2">Component Visibility Toggles</h3>
+          <div className="p-4 border border-surface-border bg-black/30 rounded-xl space-y-4">
+            <h3 className="text-xs font-bold text-text-tertiary border-b border-surface-border pb-2">Component Visibility Toggles</h3>
             <div className="flex flex-wrap gap-6">
               <label className="flex items-center gap-2 cursor-pointer text-sm">
                 <input type="checkbox" checked={form.visibility.seoLinkTabs} onChange={e => setForm(p => ({ ...p, visibility: { ...p.visibility, seoLinkTabs: e.target.checked } }))} className="rounded bg-black border-white/20 text-brand-500 focus:ring-brand-500" />
@@ -427,7 +427,7 @@ const FooterCMSPage: React.FC = () => {
                 <input className="input text-xs" placeholder="© 2026 Goldenhive" value={form.branding.copyrightText} onChange={e => setForm(p => ({ ...p, branding: { ...p.branding, copyrightText: e.target.value } }))} />
                 <div className="flex gap-2">
                   {(form.branding._logoUrl || form.branding._logoFile) && (
-                    <img src={form.branding._logoFile ? URL.createObjectURL(form.branding._logoFile) : form.branding._logoUrl} alt="Logo" className="w-8 h-8 rounded shrink-0 object-cover border border-white/20" />
+                    <img src={form.branding._logoFile ? URL.createObjectURL(form.branding._logoFile) : form.branding._logoUrl} alt="Logo" className="w-8 h-8 rounded shrink-0 object-cover border border-surface-border" />
                   )}
                   <input type="file" className="input text-xs p-1.5" title="Change Logo" onChange={e => {
                      setForm(p => ({ ...p, branding: { ...p.branding, _logoFile: e.target.files?.[0] || null } }))
@@ -441,7 +441,7 @@ const FooterCMSPage: React.FC = () => {
                 <input className="input text-xs" placeholder="https://..." value={form.qrCode.link} onChange={e => setForm(p => ({ ...p, qrCode: { ...p.qrCode, link: e.target.value } }))} />
                 <div className="flex gap-2">
                   {(form.qrCode._imageUrl || form.qrCode._imageFile) && (
-                    <img src={form.qrCode._imageFile ? URL.createObjectURL(form.qrCode._imageFile) : form.qrCode._imageUrl} alt="QR" className="w-8 h-8 rounded shrink-0 object-cover border border-white/20 bg-white" />
+                    <img src={form.qrCode._imageFile ? URL.createObjectURL(form.qrCode._imageFile) : form.qrCode._imageUrl} alt="QR" className="w-8 h-8 rounded shrink-0 object-cover border border-surface-border bg-white" />
                   )}
                   <input type="file" className="input text-xs p-1.5" title="Change QR" onChange={e => {
                      setForm(p => ({ ...p, qrCode: { ...p.qrCode, _imageFile: e.target.files?.[0] || null } }))
@@ -473,7 +473,7 @@ const FooterCMSPage: React.FC = () => {
                       </div>
                       
                       {isExp && (
-                        <div className="p-3 border-t border-white/5 bg-slate-900/30">
+                        <div className="p-3 border-t border-surface-border bg-surface-card flex flex-col gap-3">
                            <div className="flex justify-between mb-4 gap-4 items-center">
                               <input className="input text-sm w-1/3" placeholder="Column Title" value={col.title} onChange={e => {
                                  const c2 = [...form.footerColumns]
@@ -492,7 +492,7 @@ const FooterCMSPage: React.FC = () => {
                                    <button className="p-1 hover:text-red-400 text-slate-500 shrink-0" onClick={() => removeColumnItem(cIdx, iIdx)}><Trash className="w-3.5" /></button>
                                 </div>
                              ))}
-                             {col.items.length === 0 && <p className="text-xs text-slate-500 py-2">No links within this column.</p>}
+                             {col.items.length === 0 && <p className="text-xs text-text-tertiary py-2">No links within this column.</p>}
                            </div>
                         </div>
                       )}

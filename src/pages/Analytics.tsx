@@ -47,28 +47,28 @@ const AnalyticsPage: React.FC = () => {
       />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Revenue</p>
-          <p className="mt-2 text-2xl font-bold text-orange-300">₹{Number(summary.totalRevenue || 0).toLocaleString()}</p>
-          <div className="mt-3 inline-flex items-center gap-2 text-xs text-slate-300">
+        <div className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <p className="text-xs uppercase tracking-[0.2em] text-text-tertiary">Revenue</p>
+          <p className="mt-2 text-2xl font-bold text-primary-500">₹{Number(summary.totalRevenue || 0).toLocaleString()}</p>
+          <div className="mt-3 inline-flex items-center gap-2 text-xs text-text-secondary">
             <DollarSign className="h-3.5 w-3.5" />
             Total captured revenue
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Users</p>
-          <p className="mt-2 text-2xl font-bold text-cyan-300">{Number(summary.totalUsers || 0).toLocaleString()}</p>
-          <div className="mt-3 inline-flex items-center gap-2 text-xs text-slate-300">
+        <div className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <p className="text-xs uppercase tracking-[0.2em] text-text-tertiary">Users</p>
+          <p className="mt-2 text-2xl font-bold text-primary-400">{Number(summary.totalUsers || 0).toLocaleString()}</p>
+          <div className="mt-3 inline-flex items-center gap-2 text-xs text-text-secondary">
             <Users className="h-3.5 w-3.5" />
             Active platform audience
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Conversion</p>
-          <p className="mt-2 text-2xl font-bold text-emerald-300">{conversionRate}%</p>
-          <div className="mt-3 inline-flex items-center gap-2 text-xs text-slate-300">
+        <div className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <p className="text-xs uppercase tracking-[0.2em] text-text-tertiary">Conversion</p>
+          <p className="mt-2 text-2xl font-bold text-success-400">{conversionRate}%</p>
+          <div className="mt-3 inline-flex items-center gap-2 text-xs text-text-secondary">
             <Activity className="h-3.5 w-3.5" />
             Booking confirmation rate
           </div>
@@ -76,9 +76,9 @@ const AnalyticsPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <h3 className="text-sm font-semibold text-slate-100">Revenue Trend</h3>
-          <p className="mb-4 text-xs text-slate-400">Last 30 days</p>
+        <div className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <h3 className="text-sm font-semibold text-text-primary">Revenue Trend</h3>
+          <p className="mb-4 text-xs text-text-tertiary">Last 30 days</p>
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={revenueChart}>
               <defs>
@@ -96,9 +96,9 @@ const AnalyticsPage: React.FC = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <h3 className="text-sm font-semibold text-slate-100">Booking Breakdown</h3>
-          <p className="mb-4 text-xs text-slate-400">Volume by day and status</p>
+        <div className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <h3 className="text-sm font-semibold text-text-primary">Booking Breakdown</h3>
+          <p className="mb-4 text-xs text-text-tertiary">Volume by day and status</p>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={bookingChart}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
@@ -113,7 +113,7 @@ const AnalyticsPage: React.FC = () => {
         </div>
       </div>
 
-      {loading && <p className="text-sm text-slate-400">Loading analytics...</p>}
+      {loading && <p className="text-sm text-text-tertiary">Loading analytics...</p>}
     </div>
   )
 }

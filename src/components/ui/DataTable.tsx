@@ -27,38 +27,38 @@ function DataTable<T>({
   const skeletonRows = 5
 
   return (
-    <div className="table-container">
+    <div className="overflow-hidden rounded-2xl border border-surface-border bg-surface-card shadow-card-light dark:shadow-card-dark">
       <div className="overflow-x-auto">
-        <table className="table">
-          <thead>
+        <table className="min-w-full divide-y divide-surface-border text-sm text-text-primary">
+          <thead className="bg-surface-hover border-b border-surface-border">
             <tr>
               {columns.map((col) => (
-                <th key={col.header} className={col.className}>{col.header}</th>
+                <th key={col.header} className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-primary ${col.className || ''}`}>{col.header}</th>
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-surface-border">
             {loading ? (
               Array.from({ length: skeletonRows }).map((_, i) => (
                 <tr key={i}>
                   {columns.map((col) => (
-                    <td key={col.header}>
-                      <div className="skeleton h-4 w-full rounded" />
+                    <td key={col.header} className="px-4 py-4">
+                      <div className="h-4 w-full animate-pulse rounded bg-surface-border" />
                     </td>
                   ))}
                 </tr>
               ))
             ) : data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="text-center py-12 text-slate-500">
+                <td colSpan={columns.length} className="px-4 py-12 text-center text-sm text-text-secondary">
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
               data.map((row) => (
-                <tr key={keyExtractor(row)}>
+                <tr key={keyExtractor(row)} className="hover:bg-surface-hover transition-colors">
                   {columns.map((col) => (
-                    <td key={col.header} className={col.className}>
+                    <td key={col.header} className={`px-4 py-4 align-top text-text-primary ${col.className || ''}`}>
                       {col.render
                         ? col.render(row)
                         : col.accessor
@@ -73,15 +73,14 @@ function DataTable<T>({
         </table>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && onPageChange && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-surface-border">
-          <p className="text-xs text-slate-500">Page {page} of {totalPages}</p>
-          <div className="flex items-center gap-1">
+        <div className="flex flex-col gap-3 border-t border-surface-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between bg-surface-hover">
+          <p className="text-xs text-text-secondary">Page {page} of {totalPages}</p>
+          <div className="flex items-center gap-2">
             <button
               onClick={() => onPageChange(page - 1)}
               disabled={page <= 1}
-              className="btn-icon btn-ghost btn-sm disabled:opacity-30"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-surface-border bg-surface-card text-text-primary transition hover:bg-surface-border disabled:cursor-not-allowed disabled:opacity-30"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -92,8 +91,8 @@ function DataTable<T>({
                 <button
                   key={p}
                   onClick={() => onPageChange(p)}
-                  className={`w-7 h-7 rounded-md text-xs font-semibold transition-colors ${
-                    p === page ? 'bg-brand-500 text-white' : 'text-slate-400 hover:bg-surface-border'
+                  className={`flex h-9 min-w-[2.25rem] items-center justify-center rounded-lg text-xs font-semibold transition ${
+                    p === page ? 'bg-primary-500 text-white' : 'text-text-primary hover:bg-surface-border'
                   }`}
                 >
                   {p}
@@ -103,7 +102,7 @@ function DataTable<T>({
             <button
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages}
-              className="btn-icon btn-ghost btn-sm disabled:opacity-30"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-surface-border bg-surface-card text-text-primary transition hover:bg-surface-border disabled:cursor-not-allowed disabled:opacity-30"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

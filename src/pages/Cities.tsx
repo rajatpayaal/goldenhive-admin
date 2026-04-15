@@ -33,12 +33,12 @@ const CityForm: React.FC<{ defaultValues?: Partial<FormData>, onSubmit: (d: Form
            <option value="">Select State</option>
            {statesList.map(s => <option key={s._id} value={s._id}>{s.name} ({s.countryId?.name || 'Local'})</option>)}
         </select>
-        {errors.stateId && <p className="text-red-400 text-xs mt-1">{errors.stateId.message}</p>}
+        {errors.stateId && <p className="text-danger-500 text-xs mt-1">{errors.stateId.message}</p>}
       </div>
       <div>
         <label className="label">City Name *</label>
         <input {...register('name')} placeholder="e.g. Manali" className={`input ${errors.name ? 'input-error' : ''}`} />
-        {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
+        {errors.name && <p className="text-danger-500 text-xs mt-1">{errors.name.message}</p>}
       </div>
       <div>
         <label className="label">Slug (auto-generated if blank)</label>
@@ -112,15 +112,15 @@ const CitiesPage: React.FC = () => {
   const columns = [
     {
       header: 'Name',
-      render: (r: any) => (<div><p className="font-semibold text-slate-100">{r.name}</p><p className="text-xs text-slate-500">/{r.slug}</p></div>),
+      render: (r: any) => (<div><p className="font-semibold text-text-primary">{r.name}</p><p className="text-xs text-text-tertiary">/{r.slug}</p></div>),
     },
     { header: 'Status', render: (r: any) => <StatusBadge status={r.isActive ? 'ACTIVE' : 'INACTIVE'} type="package" /> },
-    { header: 'Created', render: (r: any) => <span className="text-xs text-slate-500">{format(new Date(r.createdAt), 'dd MMM yy')}</span> },
+    { header: 'Created', render: (r: any) => <span className="text-xs text-text-tertiary">{format(new Date(r.createdAt), 'dd MMM yy')}</span> },
     {
       header: 'Actions',
       render: (r: any) => (
         <div className="flex items-center gap-2">
-          <button onClick={() => handleToggle(r)} className={`btn-icon btn-sm ${r.isActive ? 'text-emerald-400 hover:text-emerald-300' : 'text-slate-500 hover:text-slate-300'}`} title={r.isActive ? 'Deactivate' : 'Activate'}>
+          <button onClick={() => handleToggle(r)} className={`btn-icon btn-sm ${r.isActive ? 'text-success-500 hover:text-success-400' : 'text-text-tertiary hover:text-text-secondary'}`} title={r.isActive ? 'Deactivate' : 'Activate'}>
              {r.isActive ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
           </button>
           <button onClick={() => { setEditing({ ...r, stateId: r.stateId?._id || r.stateId }); setModalOpen(true) }} className="btn-secondary btn-sm"><Pencil className="w-3 h-3" /></button>

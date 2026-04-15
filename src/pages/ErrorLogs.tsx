@@ -63,14 +63,14 @@ const ErrorLogsPage: React.FC = () => {
       header: 'Error',
       render: (row: any) => (
         <div>
-          <p className="font-semibold text-slate-100">{row.errorName || 'Error'}</p>
-          <p className="line-clamp-1 text-xs text-slate-400">{row.errorMessage || 'No message'}</p>
+          <p className="font-semibold text-text-primary">{row.errorName || 'Error'}</p>
+          <p className="line-clamp-1 text-xs text-text-tertiary">{row.errorMessage || 'No message'}</p>
         </div>
       ),
     },
     {
       header: 'Route',
-      render: (row: any) => <span className="text-sm text-slate-300">{row.method || 'GET'} {row.route || row.originalUrl || '-'}</span>,
+      render: (row: any) => <span className="text-sm text-text-secondary">{row.method || 'GET'} {row.route || row.originalUrl || '-'}</span>,
     },
     {
       header: 'Status',
@@ -78,7 +78,7 @@ const ErrorLogsPage: React.FC = () => {
     },
     {
       header: 'Date',
-      render: (row: any) => <span className="text-xs text-slate-400">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy HH:mm') : '—'}</span>,
+      render: (row: any) => <span className="text-xs text-text-tertiary">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy HH:mm') : '—'}</span>,
     },
     {
       header: 'Actions',
@@ -141,7 +141,7 @@ const ErrorLogsPage: React.FC = () => {
         size="xl"
       >
         {selected && (
-          <pre className="max-h-[60vh] overflow-auto rounded-xl border border-white/10 bg-slate-950/40 p-4 text-xs text-slate-200">
+          <pre className="max-h-[60vh] overflow-auto rounded-xl border border-surface-border bg-surface-card p-4 text-xs text-text-secondary">
             {JSON.stringify(selected, null, 2)}
           </pre>
         )}

@@ -5,159 +5,141 @@
 @tailwind utilities;
 
 @layer base {
+  /* ===== LIGHT MODE (Default) ===== */
   :root {
     color-scheme: light;
-    --fg: 15 23 42;               /* slate-900 */
-    --muted-fg: 71 85 105;        /* slate-600 */
-    --surface: 248 250 252;       /* slate-50 */
-    --surface-card: 255 255 255;  /* white */
-    --surface-border: 226 232 240;/* slate-200 */
-    --surface-muted: 241 245 249; /* slate-100 */
-    --bg-grad-1: 249 115 22;      /* orange */
-    --bg-grad-2: 14 165 233;      /* sky */
-    --bg-top: 255 255 255;
-    --bg-mid: 248 250 252;
-    --bg-bottom: 241 245 249;
+
+    /* Background Colors */
+    --color-bg-primary: #f9fafb;
+    --color-bg-secondary: #f3f4f6;
+    --color-bg-tertiary: #e5e7eb;
+
+    /* Surface Colors */
+    --color-surface: #ffffff;
+    --color-surface-card: #ffffff;
+    --color-surface-hover: #f9fafb;
+    --color-surface-border: #e5e7eb;
+
+    /* Text Colors */
+    --color-text-primary: #1f2937;
+    --color-text-secondary: #6b7280;
+    --color-text-tertiary: #9ca3af;
+
+    /* Legacy support - keeping for backward compatibility */
+    --fg: 31 41 55;
+    --muted-fg: 107 114 128;
+    --surface: 249 250 251;
+    --surface-card: 255 255 255;
+    --surface-border: 229 231 235;
+    --surface-muted: 243 244 246;
   }
 
+  /* ===== DARK MODE ===== */
   html.dark {
     color-scheme: dark;
-    --fg: 241 245 249;            /* slate-100 */
-    --muted-fg: 148 163 184;       /* slate-400 */
-    --surface: 15 23 42;           /* slate-900 */
-    --surface-card: 30 41 59;      /* slate-800 */
-    --surface-border: 51 65 85;    /* slate-700 */
-    --surface-muted: 71 85 105;    /* slate-600 */
-    --bg-top: 2 6 23;
-    --bg-mid: 15 23 42;
-    --bg-bottom: 17 24 39;
+
+    /* Background Colors */
+    --color-bg-primary: #0f1419;
+    --color-bg-secondary: #1f2937;
+    --color-bg-tertiary: #374151;
+
+    /* Surface Colors */
+    --color-surface: #1f2937;
+    --color-surface-card: #111827;
+    --color-surface-hover: #374151;
+    --color-surface-border: #4b5563;
+
+    /* Text Colors */
+    --color-text-primary: #f3f4f6;
+    --color-text-secondary: #d1d5db;
+    --color-text-tertiary: #9ca3af;
+
+    /* Legacy support - keeping for backward compatibility */
+    --fg: 243 244 246;
+    --muted-fg: 156 163 175;
+    --surface: 15 23 42;
+    --surface-card: 30 41 59;
+    --surface-border: 51 65 85;
+    --surface-muted: 71 85 105;
   }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+
   body {
-    @apply bg-surface text-fg font-sans antialiased;
+    @apply bg-bg-primary text-text-primary font-sans antialiased;
     min-height: 100vh;
-    background-image:
-      radial-gradient(circle at 10% 10%, rgb(var(--bg-grad-1) / 0.16), transparent 32%),
-      radial-gradient(circle at 90% 90%, rgb(var(--bg-grad-2) / 0.12), transparent 38%),
-      linear-gradient(180deg, rgb(var(--bg-top)) 0%, rgb(var(--bg-mid)) 45%, rgb(var(--bg-bottom)) 100%);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { @apply bg-surface; }
-  ::-webkit-scrollbar-thumb { @apply bg-surface-border rounded-full; }
-  ::-webkit-scrollbar-thumb:hover { @apply bg-surface-muted; }
+
+  /* Light mode smooth background with subtle gradient */
+  html:not(.dark) body {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 50%, #f0f0f0 100%);
+  }
+
+  /* Dark mode smooth background with subtle gradient */
+  html.dark body {
+    background: linear-gradient(135deg, #0f1419 0%, #1a202c 50%, #111827 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-text-primary font-semibold;
+  }
+
+  p {
+    @apply text-text-secondary;
+  }
+
+  a {
+    @apply text-primary-500 hover:text-primary-600 transition-colors;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-border rounded-full;
+    transition: background-color 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-tertiary;
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-primary-500 text-white;
+  }
+
+  /* Input styling */
+  input, textarea, select {
+    @apply text-text-primary bg-surface-card border-surface-border;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    @apply border-primary-500 outline-none ring-1 ring-primary-500/50;
+  }
+
+  /* Placeholder styling */
+  input::placeholder, textarea::placeholder {
+    @apply text-text-tertiary;
+  }
+
+  /* Light mode paragraph styling */
+  html:not(.dark) p {
+    @apply text-slate-700;
+  }
+
+  html.dark p {
+    @apply text-slate-300;
+  }
 }
 
-@layer components {
-  /* Card */
-  .card {
-    @apply bg-surface-card border border-surface-border rounded-xl shadow-card;
-  }
-
-  /* Input */
-  .input {
-    @apply w-full bg-surface border border-surface-border rounded-lg px-3 py-2 text-sm text-fg
-           placeholder-mutedFg/70 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
-           transition-all duration-200;
-  }
-  .input-error { @apply border-red-500 focus:ring-red-500; }
-
-  /* Label */
-  .label { @apply block text-xs font-semibold text-mutedFg uppercase tracking-wider mb-1.5; }
-
-  /* Button variants */
-  .btn {
-    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-  .btn-primary {
-    @apply btn bg-brand-500 hover:bg-brand-600 text-white focus:ring-brand-500 shadow-glow;
-  }
-  .btn-secondary {
-    @apply btn bg-surface-card hover:bg-surface-muted text-mutedFg border border-surface-border focus:ring-surface-border;
-  }
-  .btn-danger {
-    @apply btn bg-red-600 hover:bg-red-700 text-white focus:ring-red-500;
-  }
-  .btn-ghost {
-    @apply btn hover:bg-surface-muted text-mutedFg hover:text-fg focus:ring-surface-border;
-  }
-  .btn-sm { @apply px-3 py-1.5 text-xs; }
-  .btn-icon { @apply btn p-2; }
-
-  /* Badge */
-  .badge {
-    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold;
-  }
-  .badge-success  { @apply badge bg-emerald-500/20 text-emerald-400; }
-  .badge-warning  { @apply badge bg-amber-500/20 text-amber-400; }
-  .badge-danger   { @apply badge bg-red-500/20 text-red-400; }
-  .badge-info     { @apply badge bg-blue-500/20 text-blue-400; }
-  .badge-default  { @apply badge bg-slate-500/20 text-slate-400; }
-
-  /* Table */
-  .table-container { @apply card overflow-x-auto; }
-  .table { @apply w-full text-sm; }
-  .table thead { @apply border-b border-surface-border; }
-  .table th {
-    @apply px-4 py-3 text-left text-xs font-semibold text-mutedFg uppercase tracking-wider;
-  }
-  .table td { @apply px-4 py-3 text-fg/90 border-b border-surface-border/50; }
-  .table tbody tr { @apply hover:bg-surface-border/30 transition-colors duration-150; }
-
-  /* Sidebar */
-  .nav-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-mutedFg
-           hover:text-fg hover:bg-surface-muted transition-all duration-200 cursor-pointer;
-  }
-  .nav-link.active {
-    @apply text-brand-400 bg-brand-500/10 border border-brand-500/20;
-  }
-
-  /* Stat card */
-  .stat-card {
-    @apply card p-5 flex flex-col gap-3 hover:border-brand-500/30 transition-all duration-300;
-  }
-
-  /* Section header */
-  .section-header {
-    @apply flex items-center justify-between mb-6;
-  }
-
-  /* Form section */
-  .form-section {
-    @apply card p-6 space-y-5;
-  }
-
-  /* Toggle */
-  .toggle {
-    @apply relative inline-block w-10 h-5 cursor-pointer;
-  }
-  .toggle input { @apply sr-only; }
-  .toggle-slider {
-    @apply absolute inset-0 rounded-full bg-surface-border transition-all duration-300;
-  }
-  .toggle-slider::before {
-    content: '';
-    @apply absolute left-0.5 top-0.5 w-4 h-4 rounded-full bg-slate-400 transition-all duration-300;
-  }
-  .toggle input:checked ~ .toggle-slider { @apply bg-brand-500; }
-  .toggle input:checked ~ .toggle-slider::before {
-    @apply bg-white translate-x-5;
-  }
-
-  /* Loading skeleton */
-  .skeleton { @apply animate-pulse bg-surface-border rounded; }
-
-  /* Page wrapper */
-  .page { @apply p-6 space-y-6 animate-slide-in; }
-
-  .bg-panel-grid {
-    background-image:
-      linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-    background-size: 26px 26px;
-    background-position: -1px -1px;
-  }
-}

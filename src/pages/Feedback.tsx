@@ -56,20 +56,20 @@ const FeedbackPage: React.FC = () => {
     {
       header: 'User',
       render: (row: any) => (
-        <span className="font-medium text-slate-100">{row.userId?.firstName || ''} {row.userId?.lastName || ''}</span>
+        <span className="font-medium text-text-primary">{row.userId?.firstName || ''} {row.userId?.lastName || ''}</span>
       ),
     },
     {
       header: 'Rating',
-      render: (row: any) => <span className="text-amber-300">{row.rating || 0}/5</span>,
+      render: (row: any) => <span className="text-warning-400">{row.rating || 0}/5</span>,
     },
     {
       header: 'Comment',
-      render: (row: any) => <span className="line-clamp-2 text-sm text-slate-300">{row.comment || '—'}</span>,
+      render: (row: any) => <span className="line-clamp-2 text-sm text-text-secondary">{row.comment || '—'}</span>,
     },
     {
       header: 'Date',
-      render: (row: any) => <span className="text-xs text-slate-400">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</span>,
+      render: (row: any) => <span className="text-xs text-text-tertiary">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</span>,
     },
     {
       header: 'Actions',

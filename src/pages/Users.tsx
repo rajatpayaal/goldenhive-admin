@@ -174,8 +174,8 @@ const UsersPage: React.FC = () => {
         header: 'User',
         render: (row: UserRecord) => (
           <div>
-            <p className="font-semibold text-slate-100">{row.firstName} {row.lastName}</p>
-            <p className="text-xs text-slate-400">@{row.userName}</p>
+            <p className="font-semibold text-text-primary">{row.firstName} {row.lastName}</p>
+            <p className="text-xs text-text-secondary">@{row.userName}</p>
           </div>
         ),
       },
@@ -192,7 +192,7 @@ const UsersPage: React.FC = () => {
       {
         header: 'Joined',
         render: (row: UserRecord) => (
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-text-secondary">
             {row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}
           </span>
         ),
@@ -213,7 +213,7 @@ const UsersPage: React.FC = () => {
             <button className="btn-secondary btn-sm" onClick={() => startEdit(row)}>
               <UserRoundPen className="h-3.5 w-3.5" />
             </button>
-            <button className="btn-secondary btn-sm text-amber-300" onClick={() => toggleBlock(row)}>
+            <button className="btn-secondary btn-sm text-warning-400" onClick={() => toggleBlock(row)}>
               <ShieldAlert className="h-3.5 w-3.5" />
             </button>
             <button
@@ -272,11 +272,11 @@ const UsersPage: React.FC = () => {
       <Modal open={openProfile} onClose={() => setOpenProfile(false)} title="User Profile">
         {selected && (
           <div className="space-y-3 text-sm">
-            <p className="text-slate-100"><strong>Name:</strong> {selected.firstName} {selected.lastName}</p>
-            <p className="text-slate-100"><strong>Email:</strong> {selected.email}</p>
-            <p className="text-slate-100"><strong>Username:</strong> @{selected.userName}</p>
-            <p className="text-slate-100"><strong>Mobile:</strong> {selected.mobile || '—'}</p>
-            <p className="text-slate-100"><strong>Role:</strong> {selected.role}</p>
+            <p className="text-text-primary"><strong>Name:</strong> {selected.firstName} {selected.lastName}</p>
+            <p className="text-text-primary"><strong>Email:</strong> {selected.email}</p>
+            <p className="text-text-primary"><strong>Username:</strong> @{selected.userName}</p>
+            <p className="text-text-primary"><strong>Mobile:</strong> {selected.mobile || '—'}</p>
+            <p className="text-text-primary"><strong>Role:</strong> {selected.role}</p>
           </div>
         )}
       </Modal>
@@ -318,7 +318,7 @@ const UsersPage: React.FC = () => {
             </div>
           ) : (
             <div className="md:col-span-2">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-text-tertiary">
                 Note: changing password is handled via user self-service flows (OTP / reset-password).
               </p>
             </div>
@@ -344,7 +344,7 @@ const UsersPage: React.FC = () => {
               checked={Boolean(form.isVerified)}
               onChange={(e) => setForm((p) => ({ ...p, isVerified: e.target.checked }))}
             />
-            <label htmlFor="user-is-verified" className="text-sm text-slate-200">
+            <label htmlFor="user-is-verified" className="text-sm text-text-secondary">
               Verified
             </label>
           </div>

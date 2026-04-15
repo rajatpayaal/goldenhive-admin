@@ -109,8 +109,8 @@ const SupportPage: React.FC = () => {
       header: 'Ticket',
       render: (row: Ticket) => (
         <div>
-          <p className="font-semibold text-slate-100">{row.subject || 'Support Ticket'}</p>
-          <p className="text-xs text-slate-400">{row.name || 'Unknown'} • {row.phone || '—'}</p>
+          <p className="font-semibold text-text-primary">{row.subject || 'Support Ticket'}</p>
+          <p className="text-xs text-text-tertiary">{row.name || 'Unknown'} • {row.phone || '—'}</p>
         </div>
       ),
     },
@@ -134,13 +134,13 @@ const SupportPage: React.FC = () => {
        header: 'Agent',
        render: (row: Ticket) => {
          const ag = agents.find(a => a._id === row.assignedTo)
-         return <span className="text-xs text-slate-300 bg-white/5 border border-white/5 px-2 py-1 rounded">{ag ? `${ag.firstName} ${ag.lastName}` : 'Unassigned'}</span>
+         return <span className="text-xs text-text-secondary bg-surface-border border border-surface-border px-2 py-1 rounded">{ag ? `${ag.firstName} ${ag.lastName}` : 'Unassigned'}</span>
        }
     },
     {
       header: 'Created',
       render: (row: Ticket) => (
-        <span className="text-xs text-slate-400">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy, HH:mm') : '—'}</span>
+        <span className="text-xs text-text-tertiary">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy, HH:mm') : '—'}</span>
       ),
     },
     {
@@ -203,10 +203,10 @@ const SupportPage: React.FC = () => {
         {selected && (
           <div className="space-y-4">
             <div>
-              <p className="text-sm font-semibold text-slate-100">{selected.subject}</p>
-              <p className="text-xs text-slate-400">{selected.name} • {selected.phone || 'No phone'}</p>
+              <p className="text-sm font-semibold text-text-primary">{selected.subject}</p>
+              <p className="text-xs text-text-tertiary">{selected.name} • {selected.phone || 'No phone'}</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-slate-950/40 p-3 text-sm text-slate-300">
+            <div className="rounded-xl border border-surface-border bg-surface-card p-3 text-sm text-text-secondary">
               {selected.message || 'No message'}
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-3">

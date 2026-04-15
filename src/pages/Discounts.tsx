@@ -118,8 +118,8 @@ const DiscountsPage: React.FC = () => {
       header: 'Rule',
       render: (row: any) => (
         <div>
-          <p className="text-slate-100">{row.type === 'FLAT' ? `Flat ₹${row.value}` : `${row.value}% off`}</p>
-          <p className="text-xs text-slate-400">Min: ₹{row.minAmount || 0}</p>
+          <p className="text-text-primary">{row.type === 'FLAT' ? `Flat ₹${row.value}` : `${row.value}% off`}</p>
+          <p className="text-xs text-text-tertiary">Min: ₹{row.minAmount || 0}</p>
         </div>
       ),
     },
@@ -133,7 +133,7 @@ const DiscountsPage: React.FC = () => {
     },
     {
       header: 'Updated',
-      render: (row: any) => <span className="text-xs text-slate-400">{row.updatedAt ? format(new Date(row.updatedAt), 'dd MMM yyyy') : '—'}</span>,
+      render: (row: any) => <span className="text-xs text-text-tertiary">{row.updatedAt ? format(new Date(row.updatedAt), 'dd MMM yyyy') : '—'}</span>,
     },
     {
       header: 'Actions',
@@ -206,7 +206,7 @@ const DiscountsPage: React.FC = () => {
             <label className="label">Max Discount</label>
             <input type="number" className="input" value={form.maxDiscount} onChange={(e) => setForm((p) => ({ ...p, maxDiscount: Number(e.target.value || 0) }))} />
           </div>
-          <label className="mt-6 flex items-center gap-2 text-sm text-slate-200">
+          <label className="mt-6 flex items-center gap-2 text-sm text-text-secondary">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm((p) => ({ ...p, isActive: e.target.checked }))} />
             Active
           </label>

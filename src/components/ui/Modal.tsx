@@ -29,18 +29,18 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, size = 'm
       onClick={onClose}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
       {/* Dialog */}
       <div
         className={`relative w-full ${sizeMap[size]} bg-surface-card border border-surface-border
-                    rounded-2xl shadow-2xl animate-slide-in flex flex-col max-h-[90vh]`}
+                    rounded-2xl shadow-card-light dark:shadow-card-dark animate-slide-in flex flex-col max-h-[90vh]`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-surface-border shrink-0">
-          <h3 className="text-base font-bold text-slate-100">{title}</h3>
-          <button onClick={onClose} className="btn-icon btn-ghost -mr-2">
+          <h3 className="text-base font-bold text-text-primary">{title}</h3>
+          <button onClick={onClose} className="rounded-lg p-1.5 text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors -mr-1.5">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -50,7 +50,7 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, size = 'm
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 border-t border-surface-border flex items-center justify-end gap-3 shrink-0">
+          <div className="px-6 py-4 border-t border-surface-border flex items-center justify-end gap-3 shrink-0 bg-surface-hover">
             {footer}
           </div>
         )}

@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { Eye, EyeOff, Loader2, Moon, Sun } from 'lucide-react'
-import { useAuthStore } from '../store/authStore'
-import { useTheme } from '../context/ThemeContext'
+import { useAuthStore } from '../../store/authStore'
+import { useTheme } from '../../context/ThemeContext'
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('')

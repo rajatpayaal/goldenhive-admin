@@ -187,7 +187,7 @@ const PackagePricingPage: React.FC = () => {
           const pkgId = typeof row.packageId === 'object' ? row.packageId?._id : row.packageId
           const p = packages.find(pkg => pkg._id === pkgId)
           const name = typeof row.packageId === 'object' && row.packageId?.basic?.name ? row.packageId.basic.name : (p?.basic?.name || pkgId)
-          return <span className="font-medium text-slate-200">{name || 'Unknown Package'}</span>
+          return <span className="font-medium text-text-secondary">{name || 'Unknown Package'}</span>
         },
       },
       {
@@ -196,7 +196,7 @@ const PackagePricingPage: React.FC = () => {
           const vehId = typeof row.vehicleId === 'object' ? row.vehicleId?._id : row.vehicleId
           const v = vehicles.find(veh => veh._id === vehId)
           const name = typeof row.vehicleId === 'object' && row.vehicleId?.name ? `${row.vehicleId.name} (${row.vehicleId.type || ''})` : (v ? `${v.name} (${v.type || ''})` : vehId)
-          return <span className="text-slate-400">{name || 'Unknown Vehicle'}</span>
+          return <span className="text-text-tertiary">{name || 'Unknown Vehicle'}</span>
         },
       },
       {
@@ -221,12 +221,12 @@ const PackagePricingPage: React.FC = () => {
       },
       {
         header: 'Total Price',
-        render: (row: PricingItem) => <span className="font-bold text-slate-300">₹{(row.totalPrice || 0).toLocaleString()}</span>
+        render: (row: PricingItem) => <span className="font-bold text-text-secondary">₹{(row.totalPrice || 0).toLocaleString()}</span>
       },
       {
         header: 'Status',
         render: (row: PricingItem) => (
-          <span className={`px-2 py-1 text-xs rounded-lg font-medium ${row.isActive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-500/10 text-slate-400'}`}>
+          <span className={`px-2 py-1 text-xs rounded-lg font-medium ${row.isActive ? 'bg-success-500/10 text-success-400' : 'bg-slate-500/10 text-text-tertiary'}`}>
             {row.isActive ? 'Active' : 'Inactive'}
           </span>
         ),
@@ -268,7 +268,7 @@ const PackagePricingPage: React.FC = () => {
 
       {/* Filter Bar */}
       <div className="card p-4 flex items-center gap-3">
-        <label className="text-sm font-medium text-slate-400 shrink-0">Filter Package:</label>
+        <label className="text-sm font-medium text-text-tertiary shrink-0">Filter Package:</label>
         <select 
           className="input max-w-sm"
           value={packageFilter}

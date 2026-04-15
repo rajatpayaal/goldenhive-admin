@@ -59,8 +59,8 @@ const SettingsPage: React.FC = () => {
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <section className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <div className="mb-4 flex items-center gap-2 text-slate-200">
+        <section className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <div className="mb-4 flex items-center gap-2 text-text-secondary">
             <UserCog className="h-4 w-4 text-orange-300" />
             <h3 className="text-sm font-semibold">Organization</h3>
           </div>
@@ -88,26 +88,26 @@ const SettingsPage: React.FC = () => {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <div className="mb-4 flex items-center gap-2 text-slate-200">
+        <section className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <div className="mb-4 flex items-center gap-2 text-text-secondary">
             <Shield className="h-4 w-4 text-cyan-300" />
             <h3 className="text-sm font-semibold">Security & Access</h3>
           </div>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <label className="flex items-center justify-between rounded-xl border border-white/10 bg-slate-950/40 p-3 text-sm text-slate-200">
+            <label className="flex items-center justify-between rounded-xl border border-surface-border bg-surface-card p-3 text-sm text-text-secondary">
               <span>Require MFA for Admins</span>
               <input type="checkbox" className="h-4 w-4" {...register('requireMfaForAdmins')} />
             </label>
-            <label className="flex items-center justify-between rounded-xl border border-white/10 bg-slate-950/40 p-3 text-sm text-slate-200">
+            <label className="flex items-center justify-between rounded-xl border border-surface-border bg-surface-card p-3 text-sm text-text-secondary">
               <span>Auto-assign Support Tickets</span>
               <input type="checkbox" className="h-4 w-4" {...register('autoAssignSupport')} />
             </label>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-          <div className="mb-4 flex items-center gap-2 text-slate-200">
-            <Globe className="h-4 w-4 text-emerald-300" />
+        <section className="rounded-2xl border border-surface-border bg-surface-card p-5">
+          <div className="mb-4 flex items-center gap-2 text-text-secondary">
+            <Globe className="h-4 w-4 text-success-300" />
             <h3 className="text-sm font-semibold">Booking Workflow</h3>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

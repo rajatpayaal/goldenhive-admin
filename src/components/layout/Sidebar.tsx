@@ -105,62 +105,65 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile 
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm transition-opacity lg:hidden ${
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity lg:hidden ${
           mobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={onCloseMobile}
       />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-[280px] flex-col border-r border-surface-border/70 bg-surface/85 shadow-2xl backdrop-blur-xl transition-transform duration-300 lg:translate-x-0 ${railWidth} ${
+        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-[280px] flex-col border-r border-surface-border bg-surface shadow-lg transition-transform duration-300 lg:translate-x-0 ${railWidth} ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-16 items-center gap-3 border-b border-surface-border/70 px-4">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-surface-card border border-surface-border">
-            <img src="/logo.svg" alt="Goldenhive Holidays" className="h-7 w-7" />
+        {/* Header */}
+        <div className="flex h-16 items-center gap-3 border-b border-surface-border px-4">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-500 text-white font-semibold text-sm">
+            G
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
-              <p className="truncate text-sm font-bold text-fg">Goldenhive Admin</p>
-              <p className="text-xs text-mutedFg">Control Center</p>
+              <p className="truncate text-sm font-bold text-text-primary">Nexus Admin</p>
+              <p className="text-xs text-text-tertiary">Control Center</p>
             </div>
           )}
           <button
             type="button"
             onClick={onCloseMobile}
-            className="ml-auto rounded-md p-1.5 text-mutedFg hover:bg-surface-muted hover:text-fg lg:hidden"
+            className="ml-auto rounded-lg p-1.5 text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors lg:hidden"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="border-b border-surface-border/70 px-4 py-3">
+        {/* User Card */}
+        <div className="border-b border-surface-border px-4 py-3">
           {!collapsed && user && (
             <>
-              <p className="truncate text-sm font-semibold text-fg">
+              <p className="truncate text-sm font-semibold text-text-primary">
                 {user.firstName} {user.lastName}
               </p>
-              <div className="mt-1 flex items-center gap-2">
-                <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-300">
+              <div className="mt-2 flex items-center gap-2">
+                <span className="rounded-full bg-success-100 dark:bg-success-900/30 px-2.5 py-1 text-[10px] font-semibold text-success-700 dark:text-success-400">
                   {currentRole}
                 </span>
-                <span className="truncate text-xs text-mutedFg">{user.email}</span>
+                <span className="truncate text-xs text-text-tertiary">{user.email}</span>
               </div>
             </>
           )}
           {collapsed && (
-            <div className="mx-auto h-9 w-9 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-center text-sm font-bold leading-9 text-white">
+            <div className="mx-auto h-9 w-9 rounded-lg bg-gradient-to-br from-primary-500 to-teal-500 text-center text-sm font-bold leading-9 text-white">
               {user?.firstName?.[0]?.toUpperCase() || 'A'}
             </div>
           )}
         </div>
 
+        {/* Navigation */}
         <nav className="flex-1 space-y-6 overflow-y-auto px-2 py-4">
           {navGroups.map((group) => (
             <div key={group.label}>
               {!collapsed && (
-                <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-mutedFg">
+                <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
                   {group.label}
                 </p>
               )}
@@ -172,17 +175,21 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile 
                       end={to === '/'}
                       onClick={onCloseMobile}
                       title={collapsed ? label : undefined}
-                      className={({ isActive }) =>
-                        `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                          isActive
-                            ? 'bg-brand-500/10 text-brand-700 dark:text-brand-300 ring-1 ring-brand-500/20'
-                            : 'text-mutedFg hover:bg-surface-muted hover:text-fg'
-                        }`
+                      className={({ isActive: active }) =>
+                        `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+                          active
+                            ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800/50'
+                            : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
+                        }${!collapsed && active ? ' flex-between' : ''}`
                       }
                     >
-                      <Icon className="h-4 w-4 shrink-0" />
-                      {!collapsed && <span>{label}</span>}
-                      {!collapsed && <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-30" />}
+                      {({ isActive: active }) => (
+                        <>
+                          <Icon className="h-4 w-4 shrink-0" />
+                          {!collapsed && <span className="flex-1">{label}</span>}
+                          {!collapsed && active && <ChevronRight className="h-3.5 w-3.5 text-primary-600 dark:text-primary-400" />}
+                        </>
+                      )}
                     </NavLink>
                   </li>
                 ))}
@@ -191,10 +198,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile 
           ))}
         </nav>
 
-        <div className="border-t border-surface-border/70 p-3">
+        {/* Logout Button */}
+        <div className="border-t border-surface-border p-3">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-mutedFg transition-colors hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-all hover:bg-danger-50 dark:hover:bg-danger-900/30 hover:text-danger-600 dark:hover:text-danger-400"
           >
             <LogOut className="h-4 w-4 shrink-0" />
             {!collapsed && <span>Logout</span>}

@@ -102,7 +102,7 @@ const ChatbotFAQsPage: React.FC = () => {
       ) : (
         <div className="space-y-3">
           {faqs.length === 0 && (
-            <div className="card p-10 text-center text-slate-500">
+            <div className="card p-10 text-center text-text-tertiary">
                <BotMessageSquare className="w-8 h-8 opacity-50 mx-auto mb-2" />
                No AI logic yet. Provide answers to frequently asked questions!
             </div>
@@ -114,14 +114,14 @@ const ChatbotFAQsPage: React.FC = () => {
                 onClick={() => setExpanded(expanded === faq._id ? null : faq._id)}
               >
                 <div className="flex flex-col gap-1">
-                   <span className="font-semibold text-sm text-slate-100 flex items-center gap-2">
+                   <span className="font-semibold text-sm text-text-primary flex items-center gap-2">
                       {faq.question}
-                      {!faq.isActive && <span className="bg-red-500/20 text-red-500 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">Disabled</span>}
+                      {!faq.isActive && <span className="bg-danger-500/20 text-danger-500 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">Disabled</span>}
                    </span>
                    {faq.keywords && faq.keywords.length > 0 && (
                       <div className="flex gap-1.5 mt-1">
                          {faq.keywords.map((kw: string, idx: number) => (
-                            <span key={idx} className="bg-white/5 border border-white/10 text-slate-400 px-1.5 py-0.5 rounded text-[10px] uppercase font-medium">{kw}</span>
+                            <span key={idx} className="bg-surface-border border border-surface-border text-text-tertiary px-1.5 py-0.5 rounded text-[10px] uppercase font-medium">{kw}</span>
                          ))}
                       </div>
                    )}
@@ -130,14 +130,14 @@ const ChatbotFAQsPage: React.FC = () => {
                   <button onClick={(e) => { e.stopPropagation(); openEdit(faq) }} className="btn-ghost btn-icon btn-sm">
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); setDeleteId(faq._id) }} className="btn-ghost btn-icon btn-sm text-red-400">
+                  <button onClick={(e) => { e.stopPropagation(); setDeleteId(faq._id) }} className="btn-ghost btn-icon btn-sm text-danger-400">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
-                  {expanded === faq._id ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />}
+                  {expanded === faq._id ? <ChevronUp className="w-4 h-4 text-text-tertiary" /> : <ChevronDown className="w-4 h-4 text-text-tertiary" />}
                 </div>
               </button>
               {expanded === faq._id && (
-                <div className="px-5 pb-4 text-sm text-slate-400 border-t border-surface-border pt-3">
+                <div className="px-5 pb-4 text-sm text-text-tertiary border-t border-surface-border pt-3">
                   <span className="font-bold text-brand-400 mr-2 text-xs">AI Response:</span> 
                   {faq.answer}
                 </div>
@@ -152,12 +152,12 @@ const ChatbotFAQsPage: React.FC = () => {
           <div>
             <label className="label">User Question / Intent *</label>
             <input {...register('question', { required: 'Required' })} placeholder="e.g. How do I initiate a refund?" className={`input ${errors.question ? 'input-error' : ''}`} />
-            {errors.question && <p className="text-red-400 text-xs mt-1">{errors.question.message}</p>}
+            {errors.question && <p className="text-danger-400 text-xs mt-1">{errors.question.message}</p>}
           </div>
           <div>
             <label className="label">Matching Triggers / Keywords</label>
             <input {...register('keywords')} placeholder="e.g. refund, money back, cancel" className="input text-sm" />
-            <p className="text-[10px] text-slate-500 mt-1 uppercase">Comma-separated triggers to help the AI map closely.</p>
+            <p className="text-[10px] text-text-tertiary mt-1 uppercase">Comma-separated triggers to help the AI map closely.</p>
           </div>
           <div>
             <label className="label">AI Answer *</label>
@@ -166,10 +166,10 @@ const ChatbotFAQsPage: React.FC = () => {
           
           <label className="flex items-center gap-3 cursor-pointer mt-4">
              <Toggle checked={isActiveValue} onChange={(v) => setValue('isActive', v)} />
-             <span className="text-sm font-medium text-slate-200">Logic is currently Active</span>
+             <span className="text-sm font-medium text-text-secondary">Logic is currently Active</span>
           </label>
 
-          <div className="flex justify-end pt-4 border-t border-white/5">
+          <div className="flex justify-end pt-4 border-t border-surface-border">
             <button type="submit" disabled={saving} className="btn-primary">
               {saving ? <Spinner size="sm" /> : 'Save AI Logic'}
             </button>

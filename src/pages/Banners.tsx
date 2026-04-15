@@ -126,8 +126,8 @@ const BannersPage: React.FC = () => {
             className="h-12 w-20 rounded-lg border border-white/10 object-cover"
           />
           <div>
-            <p className="font-semibold text-slate-100">{row.title || 'Untitled'}</p>
-            <p className="text-xs text-slate-400">Order: {row.sortOrder || 1}</p>
+            <p className="font-semibold text-text-primary">{row.title || 'Untitled'}</p>
+            <p className="text-xs text-text-secondary">Order: {row.sortOrder || 1}</p>
           </div>
         </div>
       ),
@@ -142,7 +142,7 @@ const BannersPage: React.FC = () => {
     },
     {
       header: 'Updated',
-      render: (row: any) => <span className="text-xs text-slate-400">{row.updatedAt ? format(new Date(row.updatedAt), 'dd MMM yyyy') : '—'}</span>,
+      render: (row: any) => <span className="text-xs text-text-secondary">{row.updatedAt ? format(new Date(row.updatedAt), 'dd MMM yyyy') : '—'}</span>,
     },
     {
       header: 'Actions',
@@ -223,7 +223,7 @@ const BannersPage: React.FC = () => {
               <label className="label">Sort Order</label>
               <input type="number" className="input" value={form.sortOrder} onChange={(e) => setForm((p) => ({ ...p, sortOrder: Number(e.target.value || 1) }))} />
             </div>
-            <label className="mt-6 flex items-center gap-2 text-sm text-slate-200">
+            <label className="mt-6 flex items-center gap-2 text-sm text-text-secondary">
               <input type="checkbox" checked={form.isActive} onChange={(e) => setForm((p) => ({ ...p, isActive: e.target.checked }))} />
               Active
             </label>

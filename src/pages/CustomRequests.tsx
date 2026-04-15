@@ -66,14 +66,14 @@ const CustomRequestsPage: React.FC = () => {
       header: 'Customer',
       render: (row: any) => (
         <div>
-          <p className="font-semibold text-slate-100">{row.name || 'Unknown'}</p>
-          <p className="text-xs text-slate-400">{row.email || 'No email'}</p>
+          <p className="font-semibold text-text-primary">{row.name || 'Unknown'}</p>
+          <p className="text-xs text-text-tertiary">{row.email || 'No email'}</p>
         </div>
       ),
     },
     {
       header: 'Request',
-      render: (row: any) => <span className="line-clamp-2 text-sm text-slate-300">{row.message || row.requirement || 'No description'}</span>,
+      render: (row: any) => <span className="line-clamp-2 text-sm text-text-secondary">{row.message || row.requirement || 'No description'}</span>,
     },
     {
       header: 'Status',
@@ -85,7 +85,7 @@ const CustomRequestsPage: React.FC = () => {
     },
     {
       header: 'Created',
-      render: (row: any) => <span className="text-xs text-slate-400">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</span>,
+      render: (row: any) => <span className="text-xs text-text-tertiary">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</span>,
     },
     {
       header: 'Actions',

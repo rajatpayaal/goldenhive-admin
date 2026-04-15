@@ -170,8 +170,8 @@ const BookingsPage: React.FC = () => {
         header: 'Booking',
         render: (row: Booking) => (
           <div>
-            <p className="font-semibold text-slate-100">{row.bookingNo || row._id.slice(-8)}</p>
-            <p className="text-xs text-slate-400">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</p>
+            <p className="font-semibold text-text-primary">{row.bookingNo || row._id.slice(-8)}</p>
+            <p className="text-xs text-text-secondary">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</p>
           </div>
         ),
       },
@@ -180,7 +180,7 @@ const BookingsPage: React.FC = () => {
         render: (row: Booking) => (
           <div>
             <p>{row.userId?.firstName || ''} {row.userId?.lastName || ''}</p>
-            <p className="text-xs text-slate-400">{row.userId?.email || '—'}</p>
+            <p className="text-xs text-text-secondary">{row.userId?.email || '—'}</p>
           </div>
         ),
       },
@@ -190,7 +190,7 @@ const BookingsPage: React.FC = () => {
       },
       {
         header: 'Amount',
-        render: (row: Booking) => <span className="font-semibold text-orange-300">₹{Number(row.totalAmount || 0).toLocaleString()}</span>,
+        render: (row: Booking) => <span className="font-semibold text-primary-500">₹{Number(row.totalAmount || 0).toLocaleString()}</span>,
       },
       {
         header: 'Status',

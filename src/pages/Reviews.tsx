@@ -10,7 +10,7 @@ import { listPackageReviews, removeReview, upsertReview } from '../services/admi
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex items-center gap-0.5">
     {[1, 2, 3, 4, 5].map((s) => (
-      <Star key={s} className={`h-3.5 w-3.5 ${s <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-600'}`} />
+      <Star key={s} className={`h-3.5 w-3.5 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-slate-600'}`} />
     ))}
   </div>
 )
@@ -98,7 +98,7 @@ const ReviewsPage: React.FC = () => {
     {
       header: 'User',
       render: (row: any) => (
-        <span className="font-medium text-slate-100">{row.userId?.firstName || ''} {row.userId?.lastName || ''}</span>
+        <span className="font-medium text-text-primary">{row.userId?.firstName || ''} {row.userId?.lastName || ''}</span>
       ),
     },
     {
@@ -107,11 +107,11 @@ const ReviewsPage: React.FC = () => {
     },
     {
       header: 'Comment',
-      render: (row: any) => <span className="line-clamp-2 text-sm text-slate-300">{row.comment || '—'}</span>,
+      render: (row: any) => <span className="line-clamp-2 text-sm text-text-secondary">{row.comment || '—'}</span>,
     },
     {
       header: 'Created',
-      render: (row: any) => <span className="text-xs text-slate-400">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</span>,
+      render: (row: any) => <span className="text-xs text-text-tertiary">{row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—'}</span>,
     },
     {
       header: 'Actions',

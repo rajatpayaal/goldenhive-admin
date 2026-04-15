@@ -14,9 +14,13 @@ import { ThemeProvider } from './context/ThemeContext'
 // Lazy load pages
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Packages = lazy(() => import('./pages/Packages'))
+const AddPackage = lazy(() => import('./pages/Packages/Add'))
+const EditPackage = lazy(() => import('./pages/Packages/Edit'))
 const PackagePricing = lazy(() => import('./pages/PackagePricing'))
 const Vehicles = lazy(() => import('./pages/Vehicles'))
 const Categories = lazy(() => import('./pages/Categories'))
+const AddCategory = lazy(() => import('./pages/Categories/Add'))
+const EditCategory = lazy(() => import('./pages/Categories/Edit'))
 const Countries = lazy(() => import('./pages/Countries'))
 const States = lazy(() => import('./pages/States'))
 const Cities = lazy(() => import('./pages/Cities'))
@@ -69,9 +73,13 @@ function App() {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/packages" element={<Packages />} />
+                  <Route path="/packages/new" element={<AddPackage />} />
+                  <Route path="/packages/:id/edit" element={<EditPackage />} />
                   <Route path="/package-pricing" element={<PackagePricing />} />
                   <Route path="/vehicles" element={<Vehicles />} />
                   <Route path="/categories" element={<Categories />} />
+                  <Route path="/categories/new" element={<AddCategory />} />
+                  <Route path="/categories/:id/edit" element={<EditCategory />} />
                   <Route path="/countries" element={<Countries />} />
                   <Route path="/states" element={<States />} />
                   <Route path="/cities" element={<Cities />} />

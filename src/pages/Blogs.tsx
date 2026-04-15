@@ -179,24 +179,24 @@ const BlogsPage: React.FC = () => {
             <img src={row.bannerImage.url} alt={row.title} className="w-12 h-10 object-cover rounded shadow border border-white/10" />
           ) : (
             <div className="w-12 h-10 bg-white/5 rounded flex flex-col items-center justify-center">
-              <ImageIcon className="w-4 h-4 text-slate-500" />
+              <ImageIcon className="w-4 h-4 text-text-tertiary" />
             </div>
           )}
           <div>
-            <p className="font-semibold text-slate-100 line-clamp-1 max-w-[300px]">{row.title || 'Untitled'}</p>
-            <p className="text-[11px] text-slate-400 capitalize">{row.category} • {row.author}</p>
+            <p className="font-semibold text-text-primary line-clamp-1 max-w-[300px]">{row.title || 'Untitled'}</p>
+            <p className="text-[11px] text-text-secondary capitalize">{row.category} • {row.author}</p>
           </div>
         </div>
       ),
     },
     {
       header: 'Views',
-      render: (row: any) => <span className="font-medium text-slate-300">{row.views || 0}</span>
+      render: (row: any) => <span className="font-medium text-text-secondary">{row.views || 0}</span>
     },
     {
       header: 'Status',
       render: (row: any) => (
-        <span className={`px-2 py-1 text-[10px] tracking-wider uppercase font-bold rounded-md ${!row.isPublished ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-400'}`}>
+        <span className={`px-2 py-1 text-[10px] tracking-wider uppercase font-bold rounded-md ${!row.isPublished ? 'bg-warning-500/10 text-warning-500' : 'bg-success-500/10 text-success-400'}`}>
           {!row.isPublished ? 'Draft' : 'Published'}
         </span>
       ),
@@ -204,7 +204,7 @@ const BlogsPage: React.FC = () => {
     {
       header: 'Date',
       render: (row: any) => (
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-text-secondary">
           {row.publishedAt ? format(new Date(row.publishedAt), 'dd MMM yyyy') : (row.createdAt ? format(new Date(row.createdAt), 'dd MMM yyyy') : '—')}
         </span>
       ),

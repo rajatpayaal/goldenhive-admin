@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import api from '../services/apiService'
 import { useAuthStore } from '../store/authStore'
+import { API_ENDPOINTS } from '../services/api.endpoints'
 
 const TokenHandler = () => {
   const token = useAuthStore((s) => s.token)
@@ -15,10 +16,11 @@ const TokenHandler = () => {
       }
 
       try {
-        const response = await api.get('/auth/me')
+        const response = await api.get(API_ENDPOINTS.auth.me)
         const payload = response.data?.data || response.data
-        if (payload?.user) {
-          setUser(payload.user)
+        const userData = payload?.user || payload
+        if (userData) {
+          setUser(userData)
         }
       } catch {
         logout()

@@ -62,12 +62,12 @@ const defaultForm: AboutUsForm = {
 const SectionWrapper: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => {
   const [open, setOpen] = useState(false)
   return (
-    <div className="border border-white/10 bg-slate-900/50 rounded-xl overflow-hidden mt-4">
-      <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5" onClick={() => setOpen(!open)}>
-        <h3 className="text-sm font-bold text-slate-300 tracking-wider uppercase">{title}</h3>
-        {open ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
+    <div className="border border-surface-border bg-surface-card rounded-xl overflow-hidden mt-4">
+      <div className="p-4 flex justify-between items-center cursor-pointer hover:bg-surface-border" onClick={() => setOpen(!open)}>
+        <h3 className="text-sm font-bold text-text-secondary tracking-wider uppercase">{title}</h3>
+        {open ? <ChevronUp className="w-5 h-5 text-text-tertiary" /> : <ChevronDown className="w-5 h-5 text-text-tertiary" />}
       </div>
-      {open && <div className="p-4 border-t border-white/5 space-y-4">{children}</div>}
+      {open && <div className="p-4 border-t border-surface-border space-y-4">{children}</div>}
     </div>
   )
 }
@@ -189,10 +189,10 @@ const AboutUsPage: React.FC = () => {
 
   const ImageUploader = ({ img, onChange }: { img: DocImage | ImageObj & { _newFile?: File | null }; onChange: (v: any) => void }) => (
     <div className="flex gap-4 items-start">
-      <label className="cursor-pointer border border-white/20 rounded bg-black/50 p-1 w-24 h-24 flex items-center justify-center relative overflow-hidden shrink-0">
+      <label className="cursor-pointer border border-surface-border rounded bg-surface-card p-1 w-24 h-24 flex items-center justify-center relative overflow-hidden shrink-0">
         {img._newFile ? <img src={URL.createObjectURL(img._newFile)} className="w-full h-full object-cover" /> :
          img.url ? <img src={img.url} className="w-full h-full object-cover" /> :
-         <Upload className="w-6 h-6 text-slate-500" />}
+         <Upload className="w-6 h-6 text-text-tertiary" />}
         <input type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && onChange({ _newFile: e.target.files[0] })} />
       </label>
       <div className="flex-1 space-y-2">
@@ -203,8 +203,8 @@ const AboutUsPage: React.FC = () => {
   )
 
   const columns = [
-    { header: 'Hero Title', render: (r: any) => <span className="font-bold text-slate-200">{r.heroTitle}</span> },
-    { header: 'Mission Length', render: (r: any) => <span className="text-slate-400">{(r.missionStatement || '').length} chars</span> },
+    { header: 'Hero Title', render: (r: any) => <span className="font-bold text-text-secondary">{r.heroTitle}</span> },
+    { header: 'Mission Length', render: (r: any) => <span className="text-text-tertiary">{(r.missionStatement || '').length} chars</span> },
     { header: 'Config Nodes', render: (r: any) => (
       <div className="text-xs text-brand-400">
         {r.coreValues?.length || 0} Values, {r.leadershipTeam?.length || 0} Leaders, {r.stats?.length || 0} Stats
@@ -239,13 +239,13 @@ const AboutUsPage: React.FC = () => {
         <div className="max-h-[75vh] overflow-y-auto pr-3 space-y-4">
 
           {/* Visibility Matrix */}
-          <div className="p-4 border border-white/10 rounded-xl bg-slate-900/50">
-            <h3 className="text-xs font-bold text-slate-400 mb-3 border-b border-white/10 pb-2">Component Rendering Visibility</h3>
+          <div className="p-4 border border-surface-border rounded-xl bg-surface-card">
+            <h3 className="text-xs font-bold text-text-tertiary mb-3 border-b border-surface-border pb-2">Component Rendering Visibility</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {Object.keys(form.visibility).map(key => (
                 <label key={key} className="flex items-center gap-2 cursor-pointer">
                   <Toggle checked={(form.visibility as any)[key]} onChange={v => setForm(p => ({ ...p, visibility: { ...p.visibility, [key]: v } }))} />
-                  <span className="text-xs uppercase tracking-wider text-slate-300">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  <span className="text-xs uppercase tracking-wider text-text-secondary">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                 </label>
               ))}
             </div>
@@ -288,8 +288,8 @@ const AboutUsPage: React.FC = () => {
              <button className="btn-secondary btn-sm mb-4" onClick={() => setForm(p => ({ ...p, coreValues: [...p.coreValues, { title: '', description: '', iconImage: { ...emptyImage }, _isExp: true }] }))}><Plus className="w-4" /> Add Value Index</button>
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                {form.coreValues.map((cv, idx) => (
-                 <div key={idx} className="border border-white/10 bg-black/40 rounded p-4 relative">
-                   <button className="absolute top-2 right-2 text-red-500 hover:text-red-400" onClick={() => setForm(p => ({ ...p, coreValues: p.coreValues.filter((_, i) => i !== idx) }))}><Trash className="w-4 h-4" /></button>
+                 <div key={idx} className="border border-surface-border bg-surface-card rounded p-4 relative">
+                   <button className="absolute top-2 right-2 text-danger-500 hover:text-danger-400" onClick={() => setForm(p => ({ ...p, coreValues: p.coreValues.filter((_, i) => i !== idx) }))}><Trash className="w-4 h-4" /></button>
                    <div className="space-y-3 pr-6">
                       <input className="input text-sm font-bold" placeholder="Value Title" value={cv.title} onChange={e => { const arr = [...form.coreValues]; arr[idx].title = e.target.value; setForm(p => ({ ...p, coreValues: arr })) }} />
                       <textarea className="input text-xs h-16 resize-none" placeholder="Description" value={cv.description} onChange={e => { const arr = [...form.coreValues]; arr[idx].description = e.target.value; setForm(p => ({ ...p, coreValues: arr })) }} />
@@ -316,8 +316,8 @@ const AboutUsPage: React.FC = () => {
                    </div>
                    <div className="space-y-2">
                      {form.storyImages.map((img, idx) => (
-                       <div key={idx} className="relative bg-black/40 p-2 rounded border border-white/5 pr-10">
-                         <button className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500 hover:text-red-400" onClick={() => setForm(p => ({ ...p, storyImages: p.storyImages.filter((_, i) => i !== idx) }))}><Trash className="w-4" /></button>
+                       <div key={idx} className="relative bg-surface-card p-2 rounded border border-surface-border pr-10">
+                         <button className="absolute right-2 top-1/2 -translate-y-1/2 text-danger-500 hover:text-danger-400" onClick={() => setForm(p => ({ ...p, storyImages: p.storyImages.filter((_, i) => i !== idx) }))}><Trash className="w-4" /></button>
                          <ImageUploader img={img} onChange={(v) => { const a = [...form.storyImages]; if (v._newFile) a[idx]._newFile = v._newFile; else a[idx] = { ...a[idx], ...v }; setForm(p => ({ ...p, storyImages: a })) }} />
                        </div>
                      ))}
@@ -330,8 +330,8 @@ const AboutUsPage: React.FC = () => {
              <button className="btn-secondary btn-sm mb-4" onClick={() => setForm(p => ({ ...p, leadershipTeam: [...p.leadershipTeam, { name: '', designation: '', bio: '', linkedinUrl: '', twitterUrl: '', image: { ...emptyImage }, _isExp: true }] }))}><Plus className="w-4" /> Add Executive</button>
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                {form.leadershipTeam.map((lt, idx) => (
-                 <div key={idx} className="border border-white/10 bg-black/40 rounded p-4 relative">
-                   <button className="absolute top-2 right-2 text-red-500 hover:text-red-400" onClick={() => setForm(p => ({ ...p, leadershipTeam: p.leadershipTeam.filter((_, i) => i !== idx) }))}><Trash className="w-4 h-4" /></button>
+                 <div key={idx} className="border border-surface-border bg-surface-card rounded p-4 relative">
+                   <button className="absolute top-2 right-2 text-danger-500 hover:text-danger-400" onClick={() => setForm(p => ({ ...p, leadershipTeam: p.leadershipTeam.filter((_, i) => i !== idx) }))}><Trash className="w-4 h-4" /></button>
                    <div className="space-y-3 pr-6">
                       <div className="flex gap-2">
                         <input className="input text-sm" placeholder="Name" value={lt.name} onChange={e => { const a = [...form.leadershipTeam]; a[idx].name = e.target.value; setForm(p => ({ ...p, leadershipTeam: a })) }} />
@@ -377,8 +377,8 @@ const AboutUsPage: React.FC = () => {
                  </div>
                  <div className="space-y-2">
                    {form.bannerImages.map((img, idx) => (
-                     <div key={idx} className="relative bg-black/40 p-2 rounded border border-white/5 pr-10">
-                       <button className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500" onClick={() => setForm(p => ({ ...p, bannerImages: p.bannerImages.filter((_, i) => i !== idx) }))}><Trash className="w-4" /></button>
+                     <div key={idx} className="relative bg-surface-card p-2 rounded border border-surface-border pr-10">
+                       <button className="absolute right-2 top-1/2 -translate-y-1/2 text-danger-500" onClick={() => setForm(p => ({ ...p, bannerImages: p.bannerImages.filter((_, i) => i !== idx) }))}><Trash className="w-4" /></button>
                        <ImageUploader img={img} onChange={(v) => { const a = [...form.bannerImages]; if (v._newFile) a[idx]._newFile = v._newFile; else a[idx] = { ...a[idx], ...v }; setForm(p => ({ ...p, bannerImages: a })) }} />
                      </div>
                    ))}
@@ -392,8 +392,8 @@ const AboutUsPage: React.FC = () => {
                  </div>
                  <div className="space-y-2">
                    {form.galleryImages.map((img, idx) => (
-                     <div key={idx} className="relative bg-black/40 p-2 rounded border border-white/5 pr-10">
-                       <button className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500" onClick={() => setForm(p => ({ ...p, galleryImages: p.galleryImages.filter((_, i) => i !== idx) }))}><Trash className="w-4" /></button>
+                     <div key={idx} className="relative bg-surface-card p-2 rounded border border-surface-border pr-10">
+                       <button className="absolute right-2 top-1/2 -translate-y-1/2 text-danger-500" onClick={() => setForm(p => ({ ...p, galleryImages: p.galleryImages.filter((_, i) => i !== idx) }))}><Trash className="w-4" /></button>
                        <ImageUploader img={img} onChange={(v) => { const a = [...form.galleryImages]; if (v._newFile) a[idx]._newFile = v._newFile; else a[idx] = { ...a[idx], ...v }; setForm(p => ({ ...p, galleryImages: a })) }} />
                      </div>
                    ))}

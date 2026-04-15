@@ -159,13 +159,13 @@ const VehiclesPage: React.FC = () => {
             {row.image?.url ? (
               <img src={row.image.url} alt={row.name} className="w-12 h-12 rounded-lg object-cover bg-surface" />
             ) : (
-              <div className="w-12 h-12 rounded-lg bg-surface flex items-center justify-center border border-white/5">
-                <CarFront className="w-5 h-5 text-slate-500" />
+              <div className="w-12 h-12 rounded-lg bg-surface flex items-center justify-center border border-surface-border">
+                <CarFront className="w-5 h-5 text-text-tertiary" />
               </div>
             )}
             <div>
-              <p className="font-semibold text-slate-200">{row.name}</p>
-              <p className="text-xs text-slate-500">{row.type || 'Standard'}</p>
+              <p className="font-semibold text-text-secondary">{row.name}</p>
+              <p className="text-xs text-text-tertiary">{row.type || 'Standard'}</p>
             </div>
           </div>
         ),
@@ -176,12 +176,12 @@ const VehiclesPage: React.FC = () => {
       },
       {
         header: 'Sort Order',
-        render: (row: VehicleItem) => <span className="text-slate-400">{row.sortOrder}</span>
+        render: (row: VehicleItem) => <span className="text-text-tertiary">{row.sortOrder}</span>
       },
       {
         header: 'Status',
         render: (row: VehicleItem) => (
-          <span className={`px-2 py-1 text-xs rounded-lg font-medium ${row.isActive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-500/10 text-slate-400'}`}>
+          <span className={`px-2 py-1 text-xs rounded-lg font-medium ${row.isActive ? 'bg-success-500/10 text-success-400' : 'bg-slate-500/10 text-text-tertiary'}`}>
             {row.isActive ? 'Active' : 'Inactive'}
           </span>
         ),
@@ -258,7 +258,7 @@ const VehiclesPage: React.FC = () => {
                   className="h-32 object-cover rounded-lg mx-auto" 
                 />
               ) : (
-                <div className="flex flex-col items-center gap-2 text-slate-500 py-4">
+                <div className="flex flex-col items-center gap-2 text-text-tertiary py-4">
                   <Upload className="w-6 h-6" />
                   <span className="text-xs">Click to upload vehicle image</span>
                 </div>

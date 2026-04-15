@@ -212,29 +212,29 @@ const PoliciesPage: React.FC = () => {
       header: 'Policy',
       render: (row: any) => (
         <div>
-          <p className="font-semibold text-slate-100">{row.title || 'Untitled'}</p>
+          <p className="font-semibold text-text-primary">{row.title || 'Untitled'}</p>
           <div className="flex gap-2 items-center mt-1">
             <span className="text-[10px] bg-brand-500/20 text-brand-400 px-1.5 py-0.5 rounded">{row.type}</span>
-            <span className="text-xs text-slate-500">/{row.slug}</span>
+            <span className="text-xs text-text-tertiary">/{row.slug}</span>
           </div>
         </div>
       ),
     },
     {
       header: 'Sections',
-      render: (row: any) => <span className="text-sm font-medium text-slate-300">{row.sections?.length || 0}</span>
+      render: (row: any) => <span className="text-sm font-medium text-text-secondary">{row.sections?.length || 0}</span>
     },
     {
       header: 'Status',
       render: (row: any) => (
-        <span className={`px-2 py-1 text-[10px] tracking-wider uppercase font-bold rounded-md ${!row.isActive ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-400'}`}>
+        <span className={`px-2 py-1 text-[10px] tracking-wider uppercase font-bold rounded-md ${!row.isActive ? 'bg-warning-500/10 text-warning-500' : 'bg-success-500/10 text-success-400'}`}>
           {!row.isActive ? 'INACTIVE' : 'ACTIVE'}
         </span>
       ),
     },
     {
       header: 'Updated',
-      render: (row: any) => <span className="text-xs text-slate-400">{row.updatedAt ? format(new Date(row.updatedAt), 'dd MMM yyyy') : '—'}</span>,
+      render: (row: any) => <span className="text-xs text-text-tertiary">{row.updatedAt ? format(new Date(row.updatedAt), 'dd MMM yyyy') : '—'}</span>,
     },
     {
       header: 'Actions',
@@ -288,8 +288,8 @@ const PoliciesPage: React.FC = () => {
       >
         <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
 
-          <div className="border border-white/10 rounded-xl p-4 bg-slate-900/50 space-y-4">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-white/5 pb-2 mb-4">Core Settings</h3>
+          <div className="border border-surface-border rounded-xl p-4 bg-surface-card space-y-4">
+            <h3 className="text-xs font-bold text-text-tertiary uppercase tracking-widest border-b border-surface-border pb-2 mb-4">Core Settings</h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label className="label">Policy Format Type (Backend Enum)</label>
@@ -318,20 +318,20 @@ const PoliciesPage: React.FC = () => {
             
             <label className="flex items-center gap-3 cursor-pointer w-fit mt-4">
               <Toggle checked={form.isActive} onChange={(v) => setForm(pf => ({ ...pf, isActive: v }))} />
-              <span className="text-sm font-medium text-slate-200">Policy is Active</span>
+              <span className="text-sm font-medium text-text-secondary">Policy is Active</span>
             </label>
           </div>
 
-          <div className="border border-white/10 rounded-xl p-4 bg-slate-900/50 space-y-4">
-            <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-4">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Dynamic Sections Arrays</h3>
+          <div className="border border-surface-border rounded-xl p-4 bg-surface-card space-y-4">
+            <div className="flex justify-between items-center border-b border-surface-border pb-2 mb-4">
+              <h3 className="text-xs font-bold text-text-tertiary uppercase tracking-widest">Dynamic Sections Arrays</h3>
               <button className="btn-secondary btn-sm" onClick={handleSectionAdd}>
                 <Plus className="w-3" /> Add Section Block
               </button>
             </div>
             
             {form.sections.length === 0 && (
-              <div className="text-center py-6 text-slate-500 text-sm italic">
+              <div className="text-center py-6 text-text-tertiary text-sm italic">
                 No sections added. Click 'Add Section Block' to create nested content.
               </div>
             )}
@@ -340,22 +340,22 @@ const PoliciesPage: React.FC = () => {
               {form.sections.map((section, idx) => {
                 const isExpanded = expandedSection === idx
                 return (
-                  <div key={idx} className="border border-white/5 bg-black/40 rounded-lg overflow-hidden transition-all">
-                    <div 
-                      className="p-3 flex justify-between items-center cursor-pointer hover:bg-white/5"
+                  <div key={idx} className="border border-surface-border bg-surface-card rounded-lg overflow-hidden transition-all">
+                    <div
+                      className="p-3 flex justify-between items-center cursor-pointer hover:bg-surface-border"
                       onClick={() => setExpandedSection(isExpanded ? null : idx)}
                     >
-                      <span className="font-semibold text-sm text-slate-200">
+                      <span className="font-semibold text-sm text-text-secondary">
                         {section.title || `Section Block ${idx + 1}`}
                       </span>
                       <div className="flex items-center gap-2">
                         <button 
-                          className="p-1 hover:bg-red-500/20 text-red-400 rounded transition-colors"
+                          className="p-1 hover:bg-danger-500/20 text-danger-400 rounded transition-colors"
                           onClick={(e) => { e.stopPropagation(); handleSectionRemove(idx); }}
                         >
                           <Trash className="w-4 h-4" />
                         </button>
-                        {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                        {isExpanded ? <ChevronUp className="w-4 h-4 text-text-tertiary" /> : <ChevronDown className="w-4 h-4 text-text-tertiary" />}
                       </div>
                     </div>
                     

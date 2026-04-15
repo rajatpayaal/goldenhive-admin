@@ -18,7 +18,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null
   return (
     <div className="card px-3 py-2 text-xs space-y-1">
-      <p className="font-semibold text-slate-200">{label}</p>
+      <p className="font-semibold text-text-primary">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }}>{p.name}: <strong>{p.value}</strong></p>
       ))}
@@ -43,20 +43,20 @@ const DashboardPage: React.FC = () => {
   const recentBookings = data?.recentBookings || []
 
   const bookingCols = [
-    { header: 'Booking #',  render: (r: any) => <span className="font-mono text-xs text-brand-400">{r.bookingNo}</span> },
+    { header: 'Booking #',  render: (r: any) => <span className="font-mono text-xs text-primary-500">{r.bookingNo}</span> },
     { header: 'Customer',   render: (r: any) => {
       const u = r.userId || {}
       return <span>{u.firstName || ''} {u.lastName || ''}</span>
     }},
     { header: 'Package',    render: (r: any) => {
       const pkg = r.packageItems?.[0]?.packageId
-      return <span className="text-slate-300">{pkg?.basic?.name || '—'}</span>
+      return <span className="text-text-secondary">{pkg?.basic?.name || '—'}</span>
     }},
     { header: 'Amount',     render: (r: any) => <span className="font-semibold">₹{(r.totalAmount || 0).toLocaleString()}</span> },
     { header: 'Status',     render: (r: any) => <StatusBadge status={r.status} type="booking" /> },
     { header: 'Payment',    render: (r: any) => <StatusBadge status={r.paymentStatus} type="payment" /> },
     { header: 'Date',       render: (r: any) => (
-      <span className="text-slate-500 text-xs">
+      <span className="text-text-tertiary text-xs">
         {r.createdAt ? format(new Date(r.createdAt), 'dd MMM yyyy') : '—'}
       </span>
     )},
@@ -112,10 +112,10 @@ const DashboardPage: React.FC = () => {
         <div className="card p-5">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h3 className="text-sm font-bold text-slate-100">Revenue Trend</h3>
-              <p className="text-xs text-slate-500">Last 30 days</p>
+              <h3 className="text-sm font-bold text-text-primary">Revenue Trend</h3>
+              <p className="text-xs text-text-tertiary">Last 30 days</p>
             </div>
-            <TrendingUp className="w-4 h-4 text-brand-400" />
+            <TrendingUp className="w-4 h-4 text-primary-500" />
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={revenueChart} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
@@ -138,10 +138,10 @@ const DashboardPage: React.FC = () => {
         <div className="card p-5">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h3 className="text-sm font-bold text-slate-100">Booking Trend</h3>
-              <p className="text-xs text-slate-500">Last 30 days</p>
+              <h3 className="text-sm font-bold text-text-primary">Booking Trend</h3>
+              <p className="text-xs text-text-tertiary">Last 30 days</p>
             </div>
-            <CalendarCheck className="w-4 h-4 text-blue-400" />
+            <CalendarCheck className="w-4 h-4 text-primary-500" />
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={bookingChart} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
@@ -160,8 +160,8 @@ const DashboardPage: React.FC = () => {
       {/* Recent Bookings */}
       <div className="card">
         <div className="px-5 py-4 border-b border-surface-border flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-100">Recent Bookings</h3>
-          <a href="/bookings" className="text-xs text-brand-400 hover:text-brand-300 font-medium">View all →</a>
+          <h3 className="text-sm font-bold text-text-primary">Recent Bookings</h3>
+          <a href="/bookings" className="text-xs text-primary-500 hover:text-primary-400 font-medium">View all →</a>
         </div>
         <DataTable
           columns={bookingCols}
