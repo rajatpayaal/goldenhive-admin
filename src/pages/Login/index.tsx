@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
           <button
             type="button"
             onClick={toggle}
-            className="rounded-lg border border-surface-border bg-surface-card/60 p-2 text-mutedFg hover:bg-surface-muted hover:text-fg"
+            className="rounded-lg border border-surface-border bg-surface-card/60 p-2 text-text-secondary hover:bg-surface-hover hover:text-text-primary"
             title={resolved === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {resolved === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -48,11 +48,11 @@ const LoginPage: React.FC = () => {
         </div>
 
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-surface-border bg-surface-card shadow-glow">
+          <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-surface-border bg-surface-card shadow-card-light">
             <img src="/logo.svg" alt="Goldenhive Holidays" className="h-10 w-10" />
           </div>
-          <h1 className="text-2xl font-bold text-fg">Goldenhive Admin</h1>
-          <p className="mt-1 text-sm text-mutedFg">Sign in to your admin account</p>
+          <h1 className="text-2xl font-bold text-text-primary">Goldenhive Admin</h1>
+          <p className="mt-1 text-sm text-text-secondary">Sign in to your admin account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card space-y-5 border border-surface-border p-7 shadow-2xl">
@@ -84,7 +84,7 @@ const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPass((p) => !p)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-mutedFg hover:text-fg"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary"
                 title={showPass ? 'Hide password' : 'Show password'}
               >
                 {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -97,7 +97,7 @@ const LoginPage: React.FC = () => {
           </button>
         </form>
 
-        <p className="mt-5 text-center text-xs text-mutedFg">Goldenhive Holidays – Admin Panel</p>
+        <p className="mt-5 text-center text-xs text-text-tertiary">Goldenhive Holidays - Admin Panel</p>
       </div>
     </div>
   )

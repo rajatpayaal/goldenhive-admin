@@ -118,8 +118,8 @@ const Section: React.FC<{ title: string; children: React.ReactNode; collapsible?
   return (
     <div className="space-y-4 rounded-3xl border border-surface-border bg-surface-card/80 p-5 shadow-sm">
       <div className={`flex items-center justify-between ${collapsible ? 'cursor-pointer' : ''}`} onClick={() => collapsible && setOpen(!open)}>
-        <h4 className="text-sm font-semibold text-slate-800">{title}</h4>
-        {collapsible && (open ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />)}
+        <h4 className="text-sm font-semibold text-text-primary">{title}</h4>
+        {collapsible && (open ? <ChevronUp className="w-4 h-4 text-text-tertiary" /> : <ChevronDown className="w-4 h-4 text-text-tertiary" />)}
       </div>
       {open && children}
     </div>
@@ -300,40 +300,40 @@ const PackageForm: React.FC<{
 
   const Field = ({ name, label, type = 'text', placeholder = '' }: any) => (
     <div>
-      <label className="mb-2 block text-sm font-medium text-slate-800">{label}</label>
+      <label className="mb-2 block text-sm font-medium text-text-primary">{label}</label>
       <input
         type={type}
         {...register(name)}
         placeholder={placeholder}
-        className={`w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 ${(errors as any)[name] ? 'border-red-400 focus:ring-red-400/30' : ''}`}
+        className={`w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 ${(errors as any)[name] ? 'border-red-400 focus:ring-red-400/30' : ''}`}
       />
-      {(errors as any)[name] && <p className="text-red-400 text-xs mt-1">{(errors as any)[name]?.message}</p>}
+      {(errors as any)[name] && <p className="mt-1 text-xs text-danger-500">{(errors as any)[name]?.message}</p>}
     </div>
   )
 
   const TextArea = ({ name, label, rows = 3, placeholder = '' }: any) => (
     <div>
-      <label className="mb-2 block text-sm font-medium text-slate-800">{label}</label>
+      <label className="mb-2 block text-sm font-medium text-text-primary">{label}</label>
       <textarea
         {...register(name)}
         rows={rows}
         placeholder={placeholder}
-        className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 resize-none"
+        className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 resize-none"
       />
     </div>
   )
 
   const Select = ({ name, label, options, required }: any) => (
     <div>
-      <label className="mb-2 block text-sm font-medium text-slate-800">{label}{required && ' *'}</label>
+      <label className="mb-2 block text-sm font-medium text-text-primary">{label}{required && ' *'}</label>
       <select
         {...register(name)}
-        className={`w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 ${(errors as any)[name] ? 'border-red-400 focus:ring-red-400/30' : ''}`}
+        className={`w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 ${(errors as any)[name] ? 'border-red-400 focus:ring-red-400/30' : ''}`}
       >
         <option value="">Select {label}</option>
         {options.map((o: any) => <option key={o._id || o.value} value={o._id || o.value}>{o.name || o.label}</option>)}
       </select>
-      {(errors as any)[name] && <p className="text-red-400 text-xs mt-1">{(errors as any)[name]?.message}</p>}
+      {(errors as any)[name] && <p className="mt-1 text-xs text-danger-500">{(errors as any)[name]?.message}</p>}
     </div>
   )
 
@@ -360,15 +360,15 @@ const PackageForm: React.FC<{
           <Field name="nights" label="Nights" type="number" />
           <Field name="currency" label="Currency" placeholder="INR, USD" />
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">Base Price</label>
-            <input type="number" {...register('basePrice')} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+            <label className="mb-2 block text-sm font-medium text-text-primary">Base Price</label>
+            <input type="number" {...register('basePrice')} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">Discount (%)</label>
-            <input type="number" {...register('discountPercent')} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+            <label className="mb-2 block text-sm font-medium text-text-primary">Discount (%)</label>
+            <input type="number" {...register('discountPercent')} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">Final Price (Auto)</label>
+            <label className="mb-2 block text-sm font-medium text-text-primary">Final Price (Auto)</label>
             <div className="rounded-2xl border border-surface-border bg-surface-border/30 px-4 py-3 text-sm font-bold text-emerald-400">
               {watch('currency')} {finalPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
             </div>
@@ -388,12 +388,12 @@ const PackageForm: React.FC<{
       <Section title="Media Artifacts">
         <div className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">Primary Catalog Image</label>
+            <label className="mb-2 block text-sm font-medium text-text-primary">Primary Catalog Image</label>
             <div onClick={() => primaryRef.current?.click()} className="border-2 border-dashed border-surface-border rounded-xl p-6 text-center cursor-pointer hover:border-brand-500/50 transition-colors">
               {primaryFile ? (
                 <img src={URL.createObjectURL(primaryFile)} alt="Primary" className="h-32 object-cover rounded-lg mx-auto" />
               ) : (
-                <div className="flex flex-col items-center gap-2 text-slate-500">
+                <div className="flex flex-col items-center gap-2 text-text-tertiary">
                   <Upload className="w-6 h-6" />
                   <span className="text-xs">Select Primary Presentation Image</span>
                 </div>
@@ -403,7 +403,7 @@ const PackageForm: React.FC<{
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">Carousel / Gallery Images</label>
+            <label className="mb-2 block text-sm font-medium text-text-primary">Carousel / Gallery Images</label>
             <div onClick={() => galleryRef.current?.click()} className="border-2 border-dashed border-surface-border rounded-xl p-4 cursor-pointer hover:border-brand-500/50 transition-colors">
               {galleryFiles.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
@@ -417,7 +417,7 @@ const PackageForm: React.FC<{
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center gap-2 text-slate-500">
+                <div className="flex flex-col items-center gap-2 text-text-tertiary">
                   <Upload className="w-5 h-5" />
                   <span className="text-xs">Attach supplementary media for carousel</span>
                 </div>
@@ -429,7 +429,7 @@ const PackageForm: React.FC<{
       </Section>
 
       <Section title="Quick Info Grid (Stats)" collapsible>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
           <Field name="pickup" label="Pickup Location" />
           <Field name="drop" label="Drop Location" />
           <Field name="meals" label="Meals Provided" />
@@ -467,33 +467,33 @@ const PackageForm: React.FC<{
           {fields.map((field, index) => (
             <div key={field.id} className="bg-surface border border-surface-border rounded-xl p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <GripVertical className="w-4 h-4 text-slate-600 cursor-grab" />
+                <GripVertical className="w-4 h-4 cursor-grab text-text-tertiary" />
                 <span className="text-xs font-bold text-brand-400">Chronological Day {index + 1}</span>
-                <button type="button" onClick={() => remove(index)} className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-xl bg-red-500 text-white transition hover:bg-red-400">
+                <button type="button" onClick={() => remove(index)} className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-xl bg-danger-500 text-white transition hover:bg-danger-400">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-800">Itinerary Title *</label>
-                  <input {...register(`itinerary.${index}.title`)} placeholder="e.g. Arrival at Goa Airport" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Itinerary Title *</label>
+                  <input {...register(`itinerary.${index}.title`)} placeholder="e.g. Arrival at Goa Airport" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-800">Meals Handled</label>
-                  <input {...register(`itinerary.${index}.meals`)} placeholder="e.g. Breakfast, Dinner" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Meals Handled</label>
+                  <input {...register(`itinerary.${index}.meals`)} placeholder="e.g. Breakfast, Dinner" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-800">Stay Details</label>
-                  <input {...register(`itinerary.${index}.stay`)} placeholder="Hotel check-in details" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Stay Details</label>
+                  <input {...register(`itinerary.${index}.stay`)} placeholder="Hotel check-in details" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-medium text-slate-800">Action Log / Description</label>
-                  <textarea {...register(`itinerary.${index}.description`)} rows={2} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 resize-none" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Action Log / Description</label>
+                  <textarea {...register(`itinerary.${index}.description`)} rows={2} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 resize-none" />
                 </div>
               </div>
             </div>
           ))}
-          <button type="button" onClick={() => append({ day: fields.length + 1, title: '', meals: '', stay: '', description: '' })} className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-surface-border bg-surface-card px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-surface-muted">
+          <button type="button" onClick={() => append({ day: fields.length + 1, title: '', meals: '', stay: '', description: '' })} className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-surface-border bg-surface-card px-4 py-3 text-sm font-semibold text-text-primary transition hover:bg-surface-hover">
             <Plus className="w-4 h-4" /> Add Next Itinerary Node
           </button>
         </div>
@@ -528,17 +528,17 @@ const PackageForm: React.FC<{
       </Section>
 
       <Section title="DOM Node Rendering (Visibility Controls)" collapsible>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 border border-white/5 rounded-xl bg-black/20">
+        <div className="grid grid-cols-1 gap-4 rounded-xl border border-surface-border bg-surface-card p-4 sm:grid-cols-2 md:grid-cols-4">
           {VISIBILITY_KEYS.map(({ key, label }) => (
             <label key={key} className="flex items-center gap-3 cursor-pointer">
               <Toggle checked={Boolean(watch(key as any))} onChange={(v) => setValue(key as any, v)} />
-              <span className="text-[10px] uppercase font-bold text-slate-300 tracking-wider leading-none mt-[2px]">{label}</span>
+              <span className="mt-[2px] text-[10px] font-bold uppercase tracking-wider leading-none text-text-secondary">{label}</span>
             </label>
           ))}
         </div>
       </Section>
 
-      <div className="flex flex-col gap-3 pt-6 border-t border-white/10 mt-6 pb-12 md:flex-row md:justify-end">
+      <div className="mt-6 flex flex-col gap-3 border-t border-surface-border pb-12 pt-6 md:flex-row md:justify-end">
         <button type="submit" disabled={saving} className="inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto">
           {saving ? 'Saving…' : 'Save Package Build'}
         </button>

@@ -9,7 +9,7 @@ interface PageHeaderProps {
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, action, breadcrumbs }) => (
-  <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-surface-border bg-surface-card px-6 py-5 md:flex-row md:items-center md:justify-between shadow-card-light dark:shadow-card-dark">
+  <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-surface-border bg-surface-card px-6 py-5 shadow-card-light md:flex-row md:items-center md:justify-between">
     <div className="flex-1">
       {breadcrumbs && (
         <div className="mb-2 flex flex-wrap items-center gap-1 text-xs text-text-secondary">
@@ -17,7 +17,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, action,
             <span key={i} className="flex items-center gap-1">
               {i > 0 && <span className="text-text-tertiary">/</span>}
               {b.href ? (
-                <a href={b.href} className="text-primary-600 dark:text-primary-400 transition hover:text-primary-700">
+                <a href={b.href} className="text-primary-600 transition hover:text-primary-700">
                   {b.label}
                 </a>
               ) : (
@@ -76,7 +76,7 @@ export const ConfirmDialog: React.FC<ConfirmProps> = ({
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative w-full max-w-sm animate-slide-in space-y-4 rounded-2xl border border-surface-border bg-surface-card p-6 shadow-card-light dark:shadow-card-dark">
+      <div className="relative w-full max-w-sm animate-slide-in space-y-4 rounded-2xl border border-surface-border bg-surface-card p-6 shadow-card-light">
         <h4 className="text-base font-semibold text-text-primary">{title}</h4>
         <p className="text-sm text-text-secondary">{message}</p>
         <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:justify-end">
@@ -111,7 +111,7 @@ export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, label }) => (
       className={`relative h-6 w-11 rounded-full transition-colors duration-300 ${checked ? 'bg-primary-500' : 'bg-surface-border'}`}
       onClick={() => onChange(!checked)}
     >
-      <span className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white dark:bg-gray-100 shadow transition-transform duration-300 ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
+      <span className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-surface-card shadow transition-transform duration-300 ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
       <input type="checkbox" checked={checked} onChange={() => {}} className="sr-only" />
     </div>
     {label && <span className="text-sm text-text-secondary">{label}</span>}

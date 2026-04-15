@@ -144,7 +144,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile 
                 {user.firstName} {user.lastName}
               </p>
               <div className="mt-2 flex items-center gap-2">
-                <span className="rounded-full bg-success-100 dark:bg-success-900/30 px-2.5 py-1 text-[10px] font-semibold text-success-700 dark:text-success-400">
+                <span className="rounded-full bg-success-500/15 px-2.5 py-1 text-[10px] font-semibold text-success-700">
                   {currentRole}
                 </span>
                 <span className="truncate text-xs text-text-tertiary">{user.email}</span>
@@ -178,16 +178,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile 
                       className={({ isActive: active }) =>
                         `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                           active
-                            ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800/50'
+                            ? 'border border-primary-500/30 bg-primary-500/15 text-primary-700'
                             : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
-                        }${!collapsed && active ? ' flex-between' : ''}`
+                        }`
                       }
                     >
                       {({ isActive: active }) => (
                         <>
                           <Icon className="h-4 w-4 shrink-0" />
                           {!collapsed && <span className="flex-1">{label}</span>}
-                          {!collapsed && active && <ChevronRight className="h-3.5 w-3.5 text-primary-600 dark:text-primary-400" />}
+                          {!collapsed && active && <ChevronRight className="h-3.5 w-3.5 text-primary-600" />}
                         </>
                       )}
                     </NavLink>
@@ -202,7 +202,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile 
         <div className="border-t border-surface-border p-3">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-all hover:bg-danger-50 dark:hover:bg-danger-900/30 hover:text-danger-600 dark:hover:text-danger-400"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-all hover:bg-danger-500/15 hover:text-danger-600"
           >
             <LogOut className="h-4 w-4 shrink-0" />
             {!collapsed && <span>Logout</span>}

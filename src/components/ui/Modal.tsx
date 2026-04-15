@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, size = 'm
       {/* Dialog */}
       <div
         className={`relative w-full ${sizeMap[size]} bg-surface-card border border-surface-border
-                    rounded-2xl shadow-card-light dark:shadow-card-dark animate-slide-in flex flex-col max-h-[90vh]`}
+                    rounded-2xl shadow-card-light animate-slide-in flex flex-col max-h-[90vh]`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

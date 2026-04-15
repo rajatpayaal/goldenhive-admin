@@ -41,6 +41,9 @@ export const deleteUserById = async (_id: string) => {
 export const listBookings = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.bookings.root, { params })
 
+export const getBookingById = (id: string) =>
+  api.get(API_ENDPOINTS.bookings.byId(id))
+
 export const createBooking = (payload: FormData) => api.post(API_ENDPOINTS.bookings.root, payload)
 
 export const updateBookingById = (id: string, payload: FormData) =>
@@ -74,6 +77,9 @@ export const fetchAdminAnalytics = (days = 30) =>
 export const listBlogs = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.blogs.root, { params })
 
+export const getBlogById = (id: string) =>
+  api.get(API_ENDPOINTS.blogs.byId(id))
+
 export const createBlog = (payload: FormData) =>
   api.post(API_ENDPOINTS.blogs.root, payload, { headers: { 'Content-Type': 'multipart/form-data' } })
 
@@ -84,6 +90,9 @@ export const deleteBlog = (id: string) =>
   api.delete(API_ENDPOINTS.blogs.byId(id))
 
 export const listBanners = () => api.get(API_ENDPOINTS.banners.root)
+
+export const getBannerById = (id: string) =>
+  api.get(API_ENDPOINTS.banners.byId(id))
 
 export const createBanner = (payload: FormData) =>
   api.post(API_ENDPOINTS.banners.root, payload, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -96,6 +105,9 @@ export const deleteBanner = (id: string) =>
 
 export const listDiscounts = () => api.get(API_ENDPOINTS.discounts.root)
 
+export const getDiscountRuleById = (id: string) =>
+  api.get(API_ENDPOINTS.discounts.byId(id))
+
 export const createDiscountRule = (payload: Record<string, unknown>) =>
   api.post(API_ENDPOINTS.discounts.root, payload)
 
@@ -107,6 +119,9 @@ export const deleteDiscountRule = (id: string) =>
 
 export const listSupportTickets = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.support.all, { params })
+
+export const getSupportTicketById = (id: string) =>
+  api.get(API_ENDPOINTS.support.byId(id))
 
 export const updateSupportTicket = (id: string, payload: Record<string, unknown>) =>
   api.patch(API_ENDPOINTS.support.byId(id), payload)
@@ -126,6 +141,9 @@ export const markAllNotificationsRead = () =>
 export const listPackageReviews = (packageId: string, params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.reviews.byPackage(packageId), { params })
 
+export const getReviewById = (id: string) =>
+  api.get(API_ENDPOINTS.reviews.byId(id))
+
 export const upsertReview = (payload: Record<string, unknown>) =>
   api.post(API_ENDPOINTS.reviews.root, payload)
 
@@ -134,6 +152,9 @@ export const removeReview = (id: string) =>
 
 export const listChatbotFaqs = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.chatbot.faq, { params })
+
+export const getChatbotFaqById = (id: string) =>
+  api.get(API_ENDPOINTS.chatbot.faqById(id))
 
 export const createChatbotFaq = (payload: Record<string, unknown>) =>
   api.post(API_ENDPOINTS.chatbot.faq, payload)
@@ -147,6 +168,9 @@ export const deleteChatbotFaq = (id: string) =>
 export const listPolicies = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.policy.root, { params })
 
+export const getPolicyById = (id: string) =>
+  api.get(API_ENDPOINTS.policy.byId(id))
+
 export const createPolicy = (payload: FormData) =>
   api.post(API_ENDPOINTS.policy.root, payload, { headers: { 'Content-Type': 'multipart/form-data' } })
 
@@ -158,6 +182,9 @@ export const deletePolicy = (id: string) =>
 
 export const listFooters = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.footer.root, { params })
+
+export const getFooterById = (id: string) =>
+  api.get(API_ENDPOINTS.footer.byId(id))
 
 export const createFooter = (payload: FormData) =>
   api.post(API_ENDPOINTS.footer.root, payload, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -171,6 +198,9 @@ export const deleteFooter = (id: string) =>
 export const listAboutUs = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.aboutUs.all, { params })
 
+export const getAboutUsById = (id: string) =>
+  api.get(API_ENDPOINTS.aboutUs.byId(id))
+
 export const createAboutUs = (payload: FormData) =>
   api.post(API_ENDPOINTS.aboutUs.root, payload, { headers: { 'Content-Type': 'multipart/form-data' } })
 
@@ -183,6 +213,9 @@ export const deleteAboutUs = (id: string) =>
 export const listCustomRequests = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.customRequests.root, { params })
 
+export const getCustomRequestById = (id: string) =>
+  api.get(API_ENDPOINTS.customRequests.byId(id))
+
 export const updateCustomRequest = (id: string, payload: Record<string, unknown>) =>
   api.put(API_ENDPOINTS.customRequests.byId(id), payload)
 
@@ -194,6 +227,9 @@ export const deleteFeedbackById = (id: string) =>
 
 export const listErrorLogs = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.errorLogs.root, { params })
+
+export const getErrorLogById = (id: string) =>
+  api.get(API_ENDPOINTS.errorLogs.byId(id))
 
 export const deleteErrorLogById = (id: string) =>
   api.delete(API_ENDPOINTS.errorLogs.byId(id))

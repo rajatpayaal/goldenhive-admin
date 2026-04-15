@@ -320,7 +320,7 @@ const PackageForm: React.FC<{
       <Section title="Media Artifacts">
         <div className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-200">Primary Catalog Image</label>
+            <label className="mb-2 block text-sm font-medium text-text-primary">Primary Catalog Image</label>
             <div
               onClick={() => primaryRef.current?.click()}
               className="border-2 border-dashed border-surface-border rounded-xl p-6 text-center cursor-pointer hover:border-brand-500/50 transition-colors"
@@ -328,7 +328,7 @@ const PackageForm: React.FC<{
               {primaryFile ? (
                 <img src={URL.createObjectURL(primaryFile)} alt="Primary" className="h-32 object-cover rounded-lg mx-auto" />
               ) : (
-                <div className="flex flex-col items-center gap-2 text-slate-500">
+                <div className="flex flex-col items-center gap-2 text-text-tertiary">
                   <Upload className="w-6 h-6" />
                   <span className="text-xs">Select Primary Presentation Image</span>
                 </div>
@@ -338,7 +338,7 @@ const PackageForm: React.FC<{
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-200">Carousel / Gallery Images</label>
+            <label className="mb-2 block text-sm font-medium text-text-primary">Carousel / Gallery Images</label>
             <div
               onClick={() => galleryRef.current?.click()}
               className="border-2 border-dashed border-surface-border rounded-xl p-4 cursor-pointer hover:border-brand-500/50 transition-colors"
@@ -359,7 +359,7 @@ const PackageForm: React.FC<{
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center gap-2 text-slate-500">
+                <div className="flex flex-col items-center gap-2 text-text-tertiary">
                   <Upload className="w-5 h-5" />
                   <span className="text-xs">Attach supplementary media for carousel</span>
                 </div>
@@ -372,7 +372,7 @@ const PackageForm: React.FC<{
 
       {/* Quick Info */}
       <Section title="Quick Info Grid (Stats)" collapsible>
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
             <F name="pickup" label="Pickup Location" />
             <F name="drop" label="Drop Location" />
             <F name="meals" label="Meals Provided" />
@@ -413,33 +413,33 @@ const PackageForm: React.FC<{
           {fields.map((field, index) => (
             <div key={field.id} className="bg-surface border border-surface-border rounded-xl p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <GripVertical className="w-4 h-4 text-slate-600 cursor-grab" />
+                <GripVertical className="w-4 h-4 cursor-grab text-text-tertiary" />
                 <span className="text-xs font-bold text-brand-400">Chronological Day {index + 1}</span>
-                <button type="button" onClick={() => remove(index)} className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-xl bg-red-500 text-white transition hover:bg-red-400">
+                <button type="button" onClick={() => remove(index)} className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-xl bg-danger-500 text-white transition hover:bg-danger-400">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-200">Itinerary Title *</label>
-                  <input {...register(`itinerary.${index}.title`)} placeholder="e.g. Arrival at Goa Airport" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Itinerary Title *</label>
+                  <input {...register(`itinerary.${index}.title`)} placeholder="e.g. Arrival at Goa Airport" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-200">Meals Handled</label>
-                  <input {...register(`itinerary.${index}.meals`)} placeholder="e.g. Breakfast, Dinner" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Meals Handled</label>
+                  <input {...register(`itinerary.${index}.meals`)} placeholder="e.g. Breakfast, Dinner" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-200">Stay Details</label>
-                  <input {...register(`itinerary.${index}.stay`)} placeholder="Hotel check-in details" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Stay Details</label>
+                  <input {...register(`itinerary.${index}.stay`)} placeholder="Hotel check-in details" className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30" />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-medium text-slate-200">Action Log / Description</label>
-                  <textarea {...register(`itinerary.${index}.description`)} rows={2} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 resize-none" />
+                  <label className="mb-2 block text-sm font-medium text-text-primary">Action Log / Description</label>
+                  <textarea {...register(`itinerary.${index}.description`)} rows={2} className="w-full rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30 resize-none" />
                 </div>
               </div>
             </div>
           ))}
-          <button type="button" onClick={() => append({ day: fields.length + 1, title: '', meals: '', stay: '', description: '' })} className="inline-flex w-full items-center justify-center rounded-xl border border-surface-border bg-surface-card px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-surface-muted">
+          <button type="button" onClick={() => append({ day: fields.length + 1, title: '', meals: '', stay: '', description: '' })} className="inline-flex w-full items-center justify-center rounded-xl border border-surface-border bg-surface-card px-4 py-3 text-sm font-semibold text-text-primary transition hover:bg-surface-hover">
             <Plus className="w-4 h-4" /> Add Next Itinerary Node
           </button>
         </div>
@@ -476,21 +476,21 @@ const PackageForm: React.FC<{
 
       {/* Visibility */}
       <Section title="DOM Node Rendering (Visibility Controls)" collapsible>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 border border-white/5 rounded-xl bg-black/20">
+        <div className="grid grid-cols-1 gap-4 rounded-xl border border-surface-border bg-surface-card p-4 sm:grid-cols-2 md:grid-cols-4">
           {VISIBILITY_KEYS.map(({ key, label }) => (
             <label key={key} className="flex items-center gap-3 cursor-pointer">
               <Toggle
                 checked={Boolean(watch(key as any))}
                 onChange={(v) => setValue(key as any, v)}
               />
-              <span className="text-[10px] uppercase font-bold text-slate-300 tracking-wider leading-none mt-[2px]">{label}</span>
+              <span className="mt-[2px] text-[10px] font-bold uppercase tracking-wider leading-none text-text-secondary">{label}</span>
             </label>
           ))}
         </div>
       </Section>
 
       {/* Submit */}
-      <div className="flex justify-end gap-3 pt-6 border-t border-white/10 mt-6 pb-12">
+      <div className="mt-6 flex justify-end gap-3 border-t border-surface-border pb-12 pt-6">
         <button type="submit" disabled={saving} className="btn-primary w-full md:w-auto">
           {saving ? <Spinner size="sm" /> : <><Plus className="w-4 h-4" /> Save Package Build</>}
         </button>
@@ -550,13 +550,13 @@ const PackagesPage: React.FC = () => {
             <img src={r.images.primary.url} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" />
           )}
           <div>
-            <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">{r.basic?.name}</p>
+            <p className="text-sm font-semibold text-text-primary">{r.basic?.name}</p>
             <p className="text-xs text-brand-400 font-medium">{r.packageCode}</p>
           </div>
         </div>
       ),
     },
-    { header: 'Destination Node', render: (r: any) => <span className="text-slate-400">{r.basic?.destination}</span> },
+    { header: 'Destination Node', render: (r: any) => <span className="text-text-tertiary">{r.basic?.destination}</span> },
     { header: 'Cycle',    render: (r: any) => <span>{r.basic?.durationDays}D/{r.basic?.nights}N</span> },
     {
       header: 'Valuation',
@@ -564,7 +564,7 @@ const PackagesPage: React.FC = () => {
         <div>
           <p className="font-bold text-emerald-400">{r.basic?.currency} {(r.basic?.finalPrice || 0).toLocaleString()}</p>
           {r.basic?.discount > 0 && (
-            <p className="text-xs text-slate-500 line-through">{r.basic?.currency} {(r.basic?.basePrice || 0).toLocaleString()}</p>
+            <p className="text-xs text-text-tertiary line-through">{r.basic?.currency} {(r.basic?.basePrice || 0).toLocaleString()}</p>
           )}
         </div>
       ),
@@ -576,13 +576,13 @@ const PackagesPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate(`/packages/${r._id}/edit`)}
-            className="inline-flex items-center justify-center rounded-xl border border-surface-border bg-surface-card px-3 py-2 text-sm font-semibold text-slate-900 dark:text-slate-100 transition hover:bg-surface-muted"
+            className="inline-flex items-center justify-center rounded-xl border border-surface-border bg-surface-card px-3 py-2 text-sm font-semibold text-text-primary transition hover:bg-surface-hover"
           >
             Edit
           </button>
           <button
             onClick={() => setDeleteId(r._id)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-red-500 text-white transition hover:bg-red-400"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-danger-500 text-white transition hover:bg-danger-400"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -612,7 +612,7 @@ const PackagesPage: React.FC = () => {
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1) }}
           placeholder="Query package namespace..."
-          className="w-full max-w-xs rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-slate-900 dark:text-slate-100 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30"
+          className="w-full max-w-xs rounded-2xl border border-surface-border bg-surface-card/90 px-4 py-3 text-sm text-text-primary outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30"
         />
       </div>
 

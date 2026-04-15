@@ -14,39 +14,39 @@ interface StatCardProps {
 
 const colorConfig = {
   teal: {
-    bg: 'bg-teal-50 dark:bg-teal-900/20',
-    border: 'border-teal-200 dark:border-teal-800/50',
-    icon: 'text-teal-600 dark:text-teal-400',
-    trendUp: 'text-success-600 dark:text-success-400',
-    trendDown: 'text-danger-600 dark:text-danger-400',
+    bg: 'bg-primary-500/10',
+    border: 'border-primary-500/30',
+    icon: 'text-primary-600',
+    trendUp: 'text-success-600',
+    trendDown: 'text-danger-600',
   },
   blue: {
-    bg: 'bg-blue-50 dark:bg-blue-900/20',
-    border: 'border-blue-200 dark:border-blue-800/50',
-    icon: 'text-blue-600 dark:text-blue-400',
-    trendUp: 'text-success-600 dark:text-success-400',
-    trendDown: 'text-danger-600 dark:text-danger-400',
+    bg: 'bg-primary-500/10',
+    border: 'border-primary-500/30',
+    icon: 'text-primary-600',
+    trendUp: 'text-success-600',
+    trendDown: 'text-danger-600',
   },
   green: {
-    bg: 'bg-green-50 dark:bg-green-900/20',
-    border: 'border-green-200 dark:border-green-800/50',
-    icon: 'text-success-600 dark:text-success-400',
-    trendUp: 'text-success-600 dark:text-success-400',
-    trendDown: 'text-danger-600 dark:text-danger-400',
+    bg: 'bg-success-500/10',
+    border: 'border-success-500/30',
+    icon: 'text-success-600',
+    trendUp: 'text-success-600',
+    trendDown: 'text-danger-600',
   },
   orange: {
-    bg: 'bg-orange-50 dark:bg-orange-900/20',
-    border: 'border-orange-200 dark:border-orange-800/50',
-    icon: 'text-warning-600 dark:text-warning-400',
-    trendUp: 'text-success-600 dark:text-success-400',
-    trendDown: 'text-danger-600 dark:text-danger-400',
+    bg: 'bg-warning-500/10',
+    border: 'border-warning-500/30',
+    icon: 'text-warning-600',
+    trendUp: 'text-success-600',
+    trendDown: 'text-danger-600',
   },
   red: {
-    bg: 'bg-red-50 dark:bg-red-900/20',
-    border: 'border-red-200 dark:border-red-800/50',
-    icon: 'text-danger-600 dark:text-danger-400',
-    trendUp: 'text-success-600 dark:text-success-400',
-    trendDown: 'text-danger-600 dark:text-danger-400',
+    bg: 'bg-danger-500/10',
+    border: 'border-danger-500/30',
+    icon: 'text-danger-600',
+    trendUp: 'text-success-600',
+    trendDown: 'text-danger-600',
   },
 }
 
@@ -65,21 +65,21 @@ const StatCard: React.FC<StatCardProps> = ({
     return (
       <div className={`rounded-2xl border ${colors.border} ${colors.bg} p-6 h-40 animate-pulse`}>
         <div className="flex items-start justify-between mb-4">
-          <div className="h-8 w-8 rounded-lg bg-gray-200 dark:bg-gray-700" />
-          <div className="h-6 w-12 rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="h-8 w-8 rounded-lg bg-surface-border" />
+          <div className="h-6 w-12 rounded bg-surface-border" />
         </div>
         <div className="space-y-3">
-          <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700" />
-          <div className="h-8 w-32 rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="h-4 w-24 rounded bg-surface-border" />
+          <div className="h-8 w-32 rounded bg-surface-border" />
         </div>
       </div>
     )
   }
 
   return (
-    <div className={`rounded-2xl border ${colors.border} ${colors.bg} p-6 transition-all duration-300 hover:shadow-card-light dark:hover:shadow-card-dark`}>
+    <div className={`rounded-2xl border ${colors.border} ${colors.bg} p-6 transition-all duration-300 hover:shadow-lg-light`}>
       <div className="flex items-start justify-between mb-4">
-        <div className="p-2.5 rounded-lg bg-white dark:bg-gray-800">
+        <div className="rounded-lg bg-surface-card p-2.5">
           <Icon className={`w-5 h-5 ${colors.icon}`} />
         </div>
         {trend !== undefined && (

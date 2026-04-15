@@ -27,7 +27,7 @@ function DataTable<T>({
   const skeletonRows = 5
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-surface-border bg-surface-card shadow-card-light dark:shadow-card-dark">
+    <div className="overflow-hidden rounded-2xl border border-surface-border bg-surface-card shadow-card-light">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-surface-border text-sm text-text-primary">
           <thead className="bg-surface-hover border-b border-surface-border">
