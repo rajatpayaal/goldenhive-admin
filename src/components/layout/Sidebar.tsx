@@ -1,0 +1,208 @@
+import React from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import {
+  LayoutDashboard,
+  Package,
+  CalendarCheck,
+  Users,
+  Bell,
+  LogOut,
+  ChevronRight,
+  Palmtree,
+  BarChart3,
+  Settings,
+  X,
+  Shapes,
+  MapPin,
+  Map,
+  Navigation,
+  NotebookPen,
+  Megaphone,
+  TicketPercent,
+  MessagesSquare,
+  Star,
+  CircleHelp,
+  ClipboardList,
+  MessageSquareQuote,
+  MessageSquare,
+  FileText,
+  LayoutTemplate,
+  ShieldAlert,
+  Shield,
+  ArrowDownToLine,
+  Banknote,
+  CarFront,
+} from 'lucide-react'
+import { useAuthStore } from '../../store/authStore'
+import toast from 'react-hot-toast'
+
+const navGroups = [
+  {
+    label: 'Overview',
+    items: [
+      { label: 'Dashboard', to: '/', icon: LayoutDashboard },
+      { label: 'Analytics', to: '/analytics', icon: BarChart3 },
+    ],
+  },
+  {
+    label: 'Management',
+    items: [
+      { label: 'Users', to: '/users', icon: Users },
+      { label: 'Bookings', to: '/bookings', icon: CalendarCheck },
+      { label: 'Packages', to: '/packages', icon: Package },
+      { label: 'Package Pricing', to: '/package-pricing', icon: Banknote },
+      { label: 'Vehicles', to: '/vehicles', icon: CarFront },
+      { label: 'Countries', to: '/countries', icon: Navigation },
+      { label: 'States', to: '/states', icon: Map },
+      { label: 'Cities', to: '/cities', icon: MapPin },
+      { label: 'Categories', to: '/categories', icon: Shapes },
+      { label: 'Blogs', to: '/blogs', icon: NotebookPen },
+      { label: 'Banners', to: '/banners', icon: Megaphone },
+      { label: 'Discounts', to: '/discounts', icon: TicketPercent },
+      { label: 'Support', to: '/support', icon: MessagesSquare },
+      { label: 'Custom Requests', to: '/custom-requests', icon: ClipboardList },
+      { label: 'Feedback', to: '/feedback', icon: MessageSquare },
+      { label: 'About Us', to: '/about-us', icon: NotebookPen },
+      { label: 'Policies', to: '/policies', icon: Shield },
+      { label: 'Footer CMS', to: '/footer', icon: ArrowDownToLine },
+      { label: 'Reviews', to: '/reviews', icon: Star },
+      { label: 'FAQs', to: '/faqs', icon: CircleHelp },
+      { label: 'AI Chatbot', to: '/chatbot', icon: MessageSquareQuote },
+      { label: 'Notifications', to: '/notifications', icon: Bell },
+    ],
+  },
+  {
+    label: 'System',
+    items: [
+      { label: 'Policies', to: '/policies', icon: FileText },
+      { label: 'Footer CMS', to: '/footer', icon: LayoutTemplate },
+      { label: 'Error Logs', to: '/error-logs', icon: ShieldAlert },
+      { label: 'Settings', to: '/settings', icon: Settings },
+    ],
+  },
+]
+
+interface SidebarProps {
+  collapsed: boolean
+  mobileOpen: boolean
+  onCloseMobile: () => void
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile }) => {
+  const { user, logout } = useAuthStore()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    toast.success('Logged out successfully')
+    navigate('/login')
+  }
+
+  const currentRole = String(user?.role || 'ADMIN').toUpperCase()
+
+  const railWidth = collapsed ? 'lg:w-[88px]' : 'lg:w-[280px]'
+
+  return (
+    <>
+      <div
+        className={`fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm transition-opacity lg:hidden ${
+          mobileOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={onCloseMobile}
+      />
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-[280px] flex-col border-r border-surface-border/70 bg-surface/85 shadow-2xl backdrop-blur-xl transition-transform duration-300 lg:translate-x-0 ${railWidth} ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex h-16 items-center gap-3 border-b border-surface-border/70 px-4">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-surface-card border border-surface-border">
+            <img src="/logo.svg" alt="Goldenhive Holidays" className="h-7 w-7" />
+          </div>
+          {!collapsed && (
+            <div className="overflow-hidden">
+              <p className="truncate text-sm font-bold text-fg">Goldenhive Admin</p>
+              <p className="text-xs text-mutedFg">Control Center</p>
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={onCloseMobile}
+            className="ml-auto rounded-md p-1.5 text-mutedFg hover:bg-surface-muted hover:text-fg lg:hidden"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="border-b border-surface-border/70 px-4 py-3">
+          {!collapsed && user && (
+            <>
+              <p className="truncate text-sm font-semibold text-fg">
+                {user.firstName} {user.lastName}
+              </p>
+              <div className="mt-1 flex items-center gap-2">
+                <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-300">
+                  {currentRole}
+                </span>
+                <span className="truncate text-xs text-mutedFg">{user.email}</span>
+              </div>
+            </>
+          )}
+          {collapsed && (
+            <div className="mx-auto h-9 w-9 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-center text-sm font-bold leading-9 text-white">
+              {user?.firstName?.[0]?.toUpperCase() || 'A'}
+            </div>
+          )}
+        </div>
+
+        <nav className="flex-1 space-y-6 overflow-y-auto px-2 py-4">
+          {navGroups.map((group) => (
+            <div key={group.label}>
+              {!collapsed && (
+                <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-mutedFg">
+                  {group.label}
+                </p>
+              )}
+              <ul className="space-y-1">
+                {group.items.map(({ label, to, icon: Icon }) => (
+                  <li key={to}>
+                    <NavLink
+                      to={to}
+                      end={to === '/'}
+                      onClick={onCloseMobile}
+                      title={collapsed ? label : undefined}
+                      className={({ isActive }) =>
+                        `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
+                          isActive
+                            ? 'bg-brand-500/10 text-brand-700 dark:text-brand-300 ring-1 ring-brand-500/20'
+                            : 'text-mutedFg hover:bg-surface-muted hover:text-fg'
+                        }`
+                      }
+                    >
+                      <Icon className="h-4 w-4 shrink-0" />
+                      {!collapsed && <span>{label}</span>}
+                      {!collapsed && <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-30" />}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        <div className="border-t border-surface-border/70 p-3">
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-mutedFg transition-colors hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300"
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            {!collapsed && <span>Logout</span>}
+          </button>
+        </div>
+      </aside>
+    </>
+  )
+}
+
+export default Sidebar

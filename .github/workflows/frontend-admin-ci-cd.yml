@@ -1,0 +1,96 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    environment: secrets
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+        continue-on-error: true
+
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
+
+      - name: Check Docker Publish Readiness
+        id: docker_ready
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          has_username=false
+          has_token=false
+          has_dockerfile=false
+
+          if [ -n "$DOCKER_USERNAME" ]; then
+            has_username=true
+          fi
+
+          if [ -n "$DOCKER_TOKEN" ]; then
+            has_token=true
+          fi
+
+          if [ -f "Dockerfile" ]; then
+            has_dockerfile=true
+          fi
+
+          echo "has_username=$has_username" >> "$GITHUB_OUTPUT"
+          echo "has_token=$has_token" >> "$GITHUB_OUTPUT"
+          echo "has_dockerfile=$has_dockerfile" >> "$GITHUB_OUTPUT"
+
+          if [ "$has_username" = "true" ] && [ "$has_token" = "true" ] && [ "$has_dockerfile" = "true" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Show Docker Publish Decision
+        run: |
+          echo "DOCKER_USERNAME set: ${{ steps.docker_ready.outputs.has_username }}"
+          echo "DOCKER_TOKEN set: ${{ steps.docker_ready.outputs.has_token }}"
+          echo "Dockerfile present: ${{ steps.docker_ready.outputs.has_dockerfile }}"
+          echo "Docker publish enabled: ${{ steps.docker_ready.outputs.enabled }}"
+
+      - name: Docker Login
+        if: ${{ steps.docker_ready.outputs.enabled == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build Frontend Image
+        if: ${{ steps.docker_ready.outputs.enabled == 'true' }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: docker build -t "$DOCKER_USERNAME"/goldenhive-frontend:latest .
+
+      - name: Push Frontend Image
+        if: ${{ steps.docker_ready.outputs.enabled == 'true' }}
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: docker push "$DOCKER_USERNAME"/goldenhive-frontend:latest
+
+      - name: Skip Docker Publish
+        if: ${{ steps.docker_ready.outputs.enabled != 'true' }}
+        run: echo "Docker publish skipped. Check previous step output for exact reason."
