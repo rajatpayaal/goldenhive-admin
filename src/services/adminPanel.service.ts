@@ -25,17 +25,17 @@ export type BookingPayload = {
 }
 
 export const listUsers = (params?: Record<string, unknown>) =>
-  api.get('/users', { params })
+  api.get(API_ENDPOINTS.users.root, { params })
 
 export const createUser = (payload: UserPayload) =>
   api.post(API_ENDPOINTS.auth.register, payload)
 
 export const updateUserById = async (id: string, payload: Partial<UserPayload>) => {
-  return api.patch(`/users/${id}`, payload)
+  return api.patch(API_ENDPOINTS.users.byId(id), payload)
 }
 
 export const deleteUserById = async (_id: string) => {
-  return api.delete(`/users/${_id}`)
+  return api.delete(API_ENDPOINTS.users.byId(_id))
 }
 
 export const listBookings = (params?: Record<string, unknown>) =>

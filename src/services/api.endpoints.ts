@@ -19,6 +19,8 @@ export const API_ENDPOINTS = {
     root: '/dashboard',
   },
   users: {
+    root: '/users',
+    byId: (id: string) => `/users/${id}`,
     me: '/users/me',
   },
   packages: {

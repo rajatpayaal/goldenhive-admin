@@ -28,16 +28,11 @@ export const fetchBookings = (params?: Record<string, unknown>) => api.get(API_E
 export const fetchBookingById = (id: string) => api.get(API_ENDPOINTS.bookings.byId(id))
 export const updateBookingStatus = (id: string, data: object) => api.patch(API_ENDPOINTS.bookings.status(id), data)
 
-// Backend currently exposes PATCH /users/me only.
 export const fetchUsers = async (params?: Record<string, unknown>) => {
-  try {
-    return await api.get(API_ENDPOINTS.search.root, { params: { ...(params || {}), q: '' } })
-  } catch {
-    return { data: { data: { items: [], totalPages: 1 } } }
-  }
+  return api.get(API_ENDPOINTS.users.root, { params })
 }
-export const fetchUserById = (id: string) => api.get(API_ENDPOINTS.users.me, { params: { id } })
-export const updateUser = async (_id: string, data: object) => api.patch(API_ENDPOINTS.users.me, data)
+export const fetchUserById = (id: string) => api.get(API_ENDPOINTS.users.byId(id))
+export const updateUser = async (id: string, data: object) => api.patch(API_ENDPOINTS.users.byId(id), data)
 
 export const fetchReviews = async (params?: { packageId?: string; page?: number; limit?: number }) => {
   if (params?.packageId) {
