@@ -132,9 +132,40 @@ const toCommaList = (value: any) => {
   return String(value)
 }
 
+const toBoolean = (value: unknown, fallback = true) => {
+  if (value === undefined || value === null || value === '') return fallback
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'number') return value === 1
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase()
+    if (['true', '1', 'yes', 'on'].includes(normalized)) return true
+    if (['false', '0', 'no', 'off'].includes(normalized)) return false
+  }
+  return fallback
+}
+
 export const buildPackageFormData = (data: PackageFormData, primaryImage?: File, gallery?: File[]) => {
   const fd = new FormData()
   const keys = Object.keys(data) as Array<keyof PackageFormData>
+
+  const visibility = {
+    tagline: data.visibilityTagline,
+    pricing: data.visibilityPricing,
+    stats: data.visibilityStats,
+    hero: data.visibilityHero,
+    gallery: data.visibilityGallery,
+    quickInfo: data.visibilityQuickInfo,
+    overview: data.visibilityOverview,
+    whyChooseUs: data.visibilityWhyChooseUs,
+    highlights: data.visibilityHighlights,
+    inclusions: data.visibilityInclusions,
+    exclusions: data.visibilityExclusions,
+    itinerary: data.visibilityItinerary,
+    suggestions: data.visibilitySuggestions,
+    hotelDetails: data.visibilityHotelDetails,
+    reviews: data.visibilityReviews,
+    faq: data.visibilityFaq,
+  }
 
   keys.forEach((k) => {
     const value = data[k]
@@ -149,6 +180,8 @@ export const buildPackageFormData = (data: PackageFormData, primaryImage?: File,
       fd.append(k as string, String(value))
     }
   })
+
+  fd.append('visibility', JSON.stringify(visibility))
 
   const finalPrice = Math.max(0, (Number(data.basePrice) || 0) * (1 - (Number(data.discountPercent) || 0) / 100))
   fd.append('finalPrice', String(finalPrice))
@@ -214,22 +247,22 @@ export const mapPackageToForm = (r: any): Partial<PackageFormData> => ({
   keywords: toCommaList(r.seo?.keywords),
   status: r.meta?.status || 'ACTIVE',
   itinerary: r.itinerary || [],
-  visibilityTagline: Boolean(r.visibility?.tagline ?? true),
-  visibilityPricing: Boolean(r.visibility?.pricing ?? true),
-  visibilityStats: Boolean(r.visibility?.stats ?? true),
-  visibilityHero: Boolean(r.visibility?.hero ?? true),
-  visibilityGallery: Boolean(r.visibility?.gallery ?? true),
-  visibilityQuickInfo: Boolean(r.visibility?.quickInfo ?? true),
-  visibilityOverview: Boolean(r.visibility?.overview ?? true),
-  visibilityWhyChooseUs: Boolean(r.visibility?.whyChooseUs ?? true),
-  visibilityHighlights: Boolean(r.visibility?.highlights ?? true),
-  visibilityInclusions: Boolean(r.visibility?.inclusions ?? true),
-  visibilityExclusions: Boolean(r.visibility?.exclusions ?? true),
-  visibilityItinerary: Boolean(r.visibility?.itinerary ?? true),
-  visibilitySuggestions: Boolean(r.visibility?.suggestions ?? true),
-  visibilityHotelDetails: Boolean(r.visibility?.hotelDetails ?? true),
-  visibilityReviews: Boolean(r.visibility?.reviews ?? true),
-  visibilityFaq: Boolean(r.visibility?.faq ?? true),
+  visibilityTagline: toBoolean(r.visibility?.tagline ?? r.visibilityTagline, true),
+  visibilityPricing: toBoolean(r.visibility?.pricing ?? r.visibilityPricing, true),
+  visibilityStats: toBoolean(r.visibility?.stats ?? r.visibilityStats, true),
+  visibilityHero: toBoolean(r.visibility?.hero ?? r.visibilityHero, true),
+  visibilityGallery: toBoolean(r.visibility?.gallery ?? r.visibilityGallery, true),
+  visibilityQuickInfo: toBoolean(r.visibility?.quickInfo ?? r.visibilityQuickInfo, true),
+  visibilityOverview: toBoolean(r.visibility?.overview ?? r.visibilityOverview, true),
+  visibilityWhyChooseUs: toBoolean(r.visibility?.whyChooseUs ?? r.visibilityWhyChooseUs, true),
+  visibilityHighlights: toBoolean(r.visibility?.highlights ?? r.visibilityHighlights, true),
+  visibilityInclusions: toBoolean(r.visibility?.inclusions ?? r.visibilityInclusions, true),
+  visibilityExclusions: toBoolean(r.visibility?.exclusions ?? r.visibilityExclusions, true),
+  visibilityItinerary: toBoolean(r.visibility?.itinerary ?? r.visibilityItinerary, true),
+  visibilitySuggestions: toBoolean(r.visibility?.suggestions ?? r.visibilitySuggestions, true),
+  visibilityHotelDetails: toBoolean(r.visibility?.hotelDetails ?? r.visibilityHotelDetails, true),
+  visibilityReviews: toBoolean(r.visibility?.reviews ?? r.visibilityReviews, true),
+  visibilityFaq: toBoolean(r.visibility?.faq ?? r.visibilityFaq, true),
 })
 
 const PackageForm: React.FC<{

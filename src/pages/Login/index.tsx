@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { Eye, EyeOff, Loader2, Moon, Sun } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { useTheme } from '../../context/ThemeContext'
+import brandIcon from '../../assets/icongoldenhive.png'
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -48,8 +49,8 @@ const LoginPage: React.FC = () => {
         </div>
 
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-surface-border bg-surface-card shadow-card-light">
-            <img src="/logo.svg" alt="Goldenhive Holidays" className="h-10 w-10" />
+          <div className="mx-auto mb-4 inline-flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-surface-border bg-surface-card shadow-card-light">
+            <img src={brandIcon} alt="Goldenhive Holidays" className="h-16 w-16 object-contain" />
           </div>
           <h1 className="text-2xl font-bold text-text-primary">Goldenhive Admin</h1>
           <p className="mt-1 text-sm text-text-secondary">Sign in to your admin account</p>

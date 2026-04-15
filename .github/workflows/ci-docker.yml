@@ -1,4 +1,4 @@
-name: Admin Panel CI/CD
+name: Frontend CI/CD
 
 on:
   push:
@@ -17,22 +17,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
 
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
       - name: Build
         run: npm run build
-
-      - name: Run Tests If Present
-        run: |
-          if npm run | grep -q " test"; then
-            npm test
-          else
-            echo "No test script found. Skipping tests."
-          fi
 
       - name: Check Docker Publish Readiness
         id: docker_ready

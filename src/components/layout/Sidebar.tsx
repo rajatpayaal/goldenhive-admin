@@ -35,6 +35,7 @@ import {
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import toast from 'react-hot-toast'
+import brandIcon from '../../assets/icongoldenhive.png'
 
 const navGroups = [
   {
@@ -118,12 +119,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, mobileOpen, onCloseMobile 
       >
         {/* Header */}
         <div className="flex h-16 items-center gap-3 border-b border-surface-border px-4">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-500 text-white font-semibold text-sm">
-            G
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-surface-border bg-surface-card">
+            <img src={brandIcon} alt="Goldenhive" className="h-8 w-8 object-contain" />
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
-              <p className="truncate text-sm font-bold text-text-primary">Nexus Admin</p>
+              <p className="truncate text-sm font-bold text-text-primary">Goldenhive Admin</p>
               <p className="text-xs text-text-tertiary">Control Center</p>
             </div>
           )}

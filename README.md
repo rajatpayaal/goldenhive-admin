@@ -74,6 +74,36 @@ Override with:
 
 in your .env file.
 
+## Docker + CI/CD Setup
+
+### Local Docker
+
+- Build and run with compose:
+	- docker compose up --build -d
+- App is served by Nginx at:
+	- http://localhost:5173
+
+### GitHub Actions Workflow
+
+Single workflow file:
+
+- [.github/workflows/ci-docker.yml](.github/workflows/ci-docker.yml)
+
+It runs on push and pull request to main with steps:
+
+1. npm ci
+2. typecheck
+3. lint
+4. build
+5. docker image build + smoke test
+
+Docker push is enabled only for push on main and only when these repository secrets exist:
+
+- DOCKERHUB_USERNAME
+- DOCKERHUB_TOKEN
+
+If these secrets are missing, workflow still succeeds and skips the publish step.
+
 ## Notes for Future Integration
 
 - Add new backend route paths first in [src/services/api.endpoints.ts](src/services/api.endpoints.ts), then implement related API functions in [src/services/apiService.ts](src/services/apiService.ts).
