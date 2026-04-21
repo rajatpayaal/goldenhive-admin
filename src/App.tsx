@@ -6,7 +6,6 @@ import Login from './pages/Login'
 import PublicRoute from './utilty/PublicRoute'
 import PrivateRoute from './utilty/PrivateRoute'
 import Loader from './utilty/Loader'
-import NotFoundPage from './utilty/NotFoundPage'
 import TokenHandler from './utilty/TokenHandler'
 import { UserProvider } from './context/UserContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -170,7 +169,7 @@ function App() {
                   <Route path="/chatbot/new" element={<AddChatbotFAQ />} />
                   <Route path="/chatbot/:id/edit" element={<EditChatbotFAQ />} />
                   <Route path="/notifications" element={<Notifications />} />
-                  <Route path="*" element={<NotFoundPage />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
               </Route>
 
