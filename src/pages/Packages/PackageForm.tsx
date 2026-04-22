@@ -33,19 +33,19 @@ const schema = z.object({
   heroSubtitle: z.string().optional(),
   heroBadges: z.array(z.string()).optional(),
   heroCtaText: z.string().optional(),
-  pickup: z.array(z.string()).optional(),
-  drop: z.array(z.string()).optional(),
-  meals: z.array(z.string()).optional(),
+  pickup: z.string().optional(),
+  drop: z.string().optional(),
+  meals: z.string().optional(),
   stay: z.string().optional(),
-  transport: z.array(z.string()).optional(),
+  transport: z.string().optional(),
   difficulty: z.string().optional(),
   timing: z.string().optional(),
   quickDuration: z.string().optional(),
   ageLimit: z.string().optional(),
-  bestTime: z.array(z.string()).optional(),
-  groupSize: z.array(z.string()).optional(),
-  language: z.array(z.string()).optional(),
-  guide: z.array(z.string()).optional(),
+  bestTime: z.string().optional(),
+  groupSize: z.string().optional(),
+  language: z.string().optional(),
+  guide: z.string().optional(),
   overviewShort: z.string().optional(),
   overviewLong: z.string().optional(),
   address: z.string().optional(),
@@ -54,9 +54,9 @@ const schema = z.object({
   highlights: z.array(z.string()).optional(),
   inclusions: z.array(z.string()).optional(),
   exclusions: z.array(z.string()).optional(),
-  travelBestTime: z.array(z.string()).optional(),
+  travelBestTime: z.string().optional(),
   temperature: z.string().optional(),
-  clothing: z.array(z.string()).optional(),
+  clothing: z.string().optional(),
   cancellation: z.string().optional(),
   refund: z.string().optional(),
   terms: z.string().optional(),
@@ -91,16 +91,6 @@ type DynamicListName =
   | 'highlights'
   | 'inclusions'
   | 'exclusions'
-  | 'pickup'
-  | 'drop'
-  | 'meals'
-  | 'transport'
-  | 'bestTime'
-  | 'groupSize'
-  | 'language'
-  | 'guide'
-  | 'travelBestTime'
-  | 'clothing'
   | 'tags'
   | 'heroBadges'
   | 'keywords'
@@ -150,15 +140,54 @@ const toCommaList = (value: any) => {
   return String(value)
 }
 
-const toStringArray = (value: any) => {
-  if (!value) return []
-  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean)
-  if (typeof value === 'string') {
-    const trimmed = value.trim()
+const normalizeOptionalText = (value: unknown) => {
+  if (value === undefined || value === null) return ''
+  const text = String(value).trim()
+  if (!text) return ''
+  const lowered = text.toLowerCase()
+  if (lowered === '[]') return ''
+  if (lowered === 'not specified.' || lowered === 'not specified') return ''
+  return text
+}
+
+const parseNestedJson = (value: unknown, depth = 0): unknown => {
+  if (typeof value !== 'string' || depth > 5) return value
+
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+
+  const looksSerialized =
+    (trimmed.startsWith('[') && trimmed.endsWith(']')) ||
+    (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+    (trimmed.startsWith('"') && trimmed.endsWith('"'))
+
+  if (!looksSerialized) return trimmed
+
+  try {
+    return parseNestedJson(JSON.parse(trimmed), depth + 1)
+  } catch {
+    return trimmed
+  }
+}
+
+const flattenToStringArray = (value: unknown): string[] => {
+  if (value === undefined || value === null || value === '') return []
+
+  const parsed = parseNestedJson(value)
+
+  if (Array.isArray(parsed)) {
+    return parsed.flatMap((item) => flattenToStringArray(item))
+  }
+
+  if (typeof parsed === 'string') {
+    const trimmed = parsed.trim()
     return trimmed ? [trimmed] : []
   }
-  return []
+
+  return [String(parsed).trim()].filter(Boolean)
 }
+
+const toStringArray = (value: any) => flattenToStringArray(value)
 
 const toBoolean = (value: unknown, fallback = true) => {
   if (value === undefined || value === null || value === '') return fallback
@@ -175,6 +204,30 @@ const toBoolean = (value: unknown, fallback = true) => {
 export const buildPackageFormData = (data: PackageFormData, primaryImage?: File, gallery?: File[]) => {
   const fd = new FormData()
   const keys = Object.keys(data) as Array<keyof PackageFormData>
+  const JSON_ARRAY_KEYS = new Set([
+    'whyChooseUs',
+    'highlights',
+    'inclusions',
+    'exclusions',
+    'tags',
+    'heroBadges',
+    'keywords',
+  ])
+  const ALWAYS_APPEND_STRING_KEYS = new Set([
+    'pickup',
+    'drop',
+    'meals',
+    'transport',
+    'bestTime',
+    'groupSize',
+    'language',
+    'guide',
+    'travelBestTime',
+    'clothing',
+    'cancellation',
+    'refund',
+    'terms',
+  ])
 
   const visibility = {
     tagline: data.visibilityTagline,
@@ -197,12 +250,18 @@ export const buildPackageFormData = (data: PackageFormData, primaryImage?: File,
 
   keys.forEach((k) => {
     const value = data[k]
-    if (['whyChooseUs', 'highlights', 'inclusions', 'exclusions', 'pickup', 'drop', 'meals', 'transport', 'bestTime', 'groupSize', 'language', 'guide', 'travelBestTime', 'clothing', 'tags', 'heroBadges', 'keywords'].includes(k as string)) {
-      fd.append(k as string, JSON.stringify(Array.isArray(value) ? value.filter(Boolean) : []))
+    if (JSON_ARRAY_KEYS.has(k as string)) {
+      const raw = Array.isArray(value) ? value : toStringArray(value)
+      const normalized = raw.map((item) => String(item).trim()).filter(Boolean)
+      const unique = Array.from(new Set(normalized))
+      fd.append(k as string, JSON.stringify(unique))
     } else if (k === 'itinerary') {
       fd.append('itinerary', JSON.stringify(value || []))
     } else if (typeof value === 'boolean') {
       fd.append(k as string, value ? 'true' : 'false')
+    } else if (ALWAYS_APPEND_STRING_KEYS.has(k as string)) {
+      // Allow clearing previously-saved values that might be `"[]"` or "Not specified."
+      fd.append(k as string, normalizeOptionalText(value))
     } else if (value !== undefined && value !== '') {
       fd.append(k as string, String(value))
     }
@@ -240,19 +299,19 @@ export const mapPackageToForm = (r: any): Partial<PackageFormData> => ({
   heroSubtitle: r.hero?.subtitle,
   heroBadges: toStringArray(r.hero?.badges),
   heroCtaText: r.hero?.ctaText,
-  pickup: toStringArray(r.quickInfo?.pickup),
-  drop: toStringArray(r.quickInfo?.drop),
-  meals: toStringArray(r.quickInfo?.meals),
+  pickup: toCommaList(toStringArray(r.quickInfo?.pickup)),
+  drop: toCommaList(toStringArray(r.quickInfo?.drop)),
+  meals: toCommaList(toStringArray(r.quickInfo?.meals)),
   stay: r.quickInfo?.stay,
-  transport: toStringArray(r.quickInfo?.transport),
+  transport: toCommaList(toStringArray(r.quickInfo?.transport)),
   difficulty: r.quickInfo?.difficulty,
   timing: r.quickInfo?.timing,
   quickDuration: r.quickInfo?.duration,
   ageLimit: r.quickInfo?.ageLimit,
-  bestTime: toStringArray(r.quickInfo?.bestTime),
-  groupSize: toStringArray(r.quickInfo?.groupSize),
-  language: toStringArray(r.quickInfo?.language),
-  guide: toStringArray(r.quickInfo?.guide),
+  bestTime: toCommaList(toStringArray(r.quickInfo?.bestTime)),
+  groupSize: toCommaList(toStringArray(r.quickInfo?.groupSize)),
+  language: toCommaList(toStringArray(r.quickInfo?.language)),
+  guide: toCommaList(toStringArray(r.quickInfo?.guide)),
   overviewShort: r.overview?.short,
   overviewLong: r.overview?.long,
   address: r.location?.address,
@@ -261,12 +320,12 @@ export const mapPackageToForm = (r: any): Partial<PackageFormData> => ({
   highlights: toStringArray(r.highlights),
   inclusions: toStringArray(r.inclusions),
   exclusions: toStringArray(r.exclusions),
-  travelBestTime: toStringArray(r.travelInfo?.bestTime),
+  travelBestTime: toCommaList(toStringArray(r.travelInfo?.bestTime)),
   temperature: r.travelInfo?.temperature,
-  clothing: toStringArray(r.travelInfo?.clothing),
-  cancellation: r.policies?.cancellation,
-  refund: r.policies?.refund,
-  terms: r.policies?.terms,
+  clothing: toCommaList(toStringArray(r.travelInfo?.clothing)),
+  cancellation: normalizeOptionalText(r.policies?.cancellation),
+  refund: normalizeOptionalText(r.policies?.refund),
+  terms: normalizeOptionalText(r.policies?.terms),
   whatsapp: r.cta?.whatsapp,
   call: r.cta?.call,
   metaTitle: r.seo?.metaTitle,
@@ -318,16 +377,6 @@ const PackageForm: React.FC<{
       highlights: [],
       inclusions: [],
       exclusions: [],
-      pickup: [],
-      drop: [],
-      meals: [],
-      transport: [],
-      bestTime: [],
-      groupSize: [],
-      language: [],
-      guide: [],
-      travelBestTime: [],
-      clothing: [],
       tags: [],
       heroBadges: [],
       keywords: [],
@@ -341,16 +390,6 @@ const PackageForm: React.FC<{
   const { fields: highlightsFields, append: appendHighlights, remove: removeHighlights } = useFieldArray({ control: control as any, name: 'highlights' as never })
   const { fields: inclusionsFields, append: appendInclusions, remove: removeInclusions } = useFieldArray({ control: control as any, name: 'inclusions' as never })
   const { fields: exclusionsFields, append: appendExclusions, remove: removeExclusions } = useFieldArray({ control: control as any, name: 'exclusions' as never })
-  const { fields: pickupFields, append: appendPickup, remove: removePickup } = useFieldArray({ control: control as any, name: 'pickup' as never })
-  const { fields: dropFields, append: appendDrop, remove: removeDrop } = useFieldArray({ control: control as any, name: 'drop' as never })
-  const { fields: mealsFields, append: appendMeals, remove: removeMeals } = useFieldArray({ control: control as any, name: 'meals' as never })
-  const { fields: transportFields, append: appendTransport, remove: removeTransport } = useFieldArray({ control: control as any, name: 'transport' as never })
-  const { fields: bestTimeFields, append: appendBestTime, remove: removeBestTime } = useFieldArray({ control: control as any, name: 'bestTime' as never })
-  const { fields: groupSizeFields, append: appendGroupSize, remove: removeGroupSize } = useFieldArray({ control: control as any, name: 'groupSize' as never })
-  const { fields: languageFields, append: appendLanguage, remove: removeLanguage } = useFieldArray({ control: control as any, name: 'language' as never })
-  const { fields: guideFields, append: appendGuide, remove: removeGuide } = useFieldArray({ control: control as any, name: 'guide' as never })
-  const { fields: travelBestTimeFields, append: appendTravelBestTime, remove: removeTravelBestTime } = useFieldArray({ control: control as any, name: 'travelBestTime' as never })
-  const { fields: clothingFields, append: appendClothing, remove: removeClothing } = useFieldArray({ control: control as any, name: 'clothing' as never })
   const { fields: tagsFields, append: appendTags, remove: removeTags } = useFieldArray({ control: control as any, name: 'tags' as never })
   const { fields: heroBadgesFields, append: appendHeroBadges, remove: removeHeroBadges } = useFieldArray({ control: control as any, name: 'heroBadges' as never })
   const { fields: keywordsFields, append: appendKeywords, remove: removeKeywords } = useFieldArray({ control: control as any, name: 'keywords' as never })
@@ -367,16 +406,6 @@ const PackageForm: React.FC<{
     highlights: [],
     inclusions: [],
     exclusions: [],
-    pickup: [],
-    drop: [],
-    meals: [],
-    transport: [],
-    bestTime: [],
-    groupSize: [],
-    language: [],
-    guide: [],
-    travelBestTime: [],
-    clothing: [],
     tags: [],
     heroBadges: [],
     keywords: [],
@@ -678,75 +707,19 @@ const PackageForm: React.FC<{
 
       <Section title="Quick Info Grid (Stats)" collapsible>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 xl:grid-cols-4">
-          <DynamicListField
-            name="pickup"
-            label="Pickup Location"
-            fields={pickupFields as Array<{ id: string }>}
-            append={appendPickup as (value: string) => void}
-            remove={removePickup}
-            placeholder="Delhi Airport"
-          />
-          <DynamicListField
-            name="drop"
-            label="Drop Location"
-            fields={dropFields as Array<{ id: string }>}
-            append={appendDrop as (value: string) => void}
-            remove={removeDrop}
-            placeholder="Mall Road"
-          />
-          <DynamicListField
-            name="meals"
-            label="Meals Provided"
-            fields={mealsFields as Array<{ id: string }>}
-            append={appendMeals as (value: string) => void}
-            remove={removeMeals}
-            placeholder="Breakfast"
-          />
+          <Field name="pickup" label="Pickup Location" />
+          <Field name="drop" label="Drop Location" />
+          <Field name="meals" label="Meals Provided" />
           <Field name="stay" label="Stay Rating" />
-          <DynamicListField
-            name="transport"
-            label="Transport Mode"
-            fields={transportFields as Array<{ id: string }>}
-            append={appendTransport as (value: string) => void}
-            remove={removeTransport}
-            placeholder="Volvo"
-          />
+          <Field name="transport" label="Transport Mode" />
           <Field name="difficulty" label="Difficulty Level" />
           <Field name="timing" label="Timing" />
           <Field name="quickDuration" label="UI Duration Label" />
           <Field name="ageLimit" label="Age Bounds" />
-          <DynamicListField
-            name="bestTime"
-            label="Best Months to Go"
-            fields={bestTimeFields as Array<{ id: string }>}
-            append={appendBestTime as (value: string) => void}
-            remove={removeBestTime}
-            placeholder="March to June"
-          />
-          <DynamicListField
-            name="groupSize"
-            label="Group Size limit"
-            fields={groupSizeFields as Array<{ id: string }>}
-            append={appendGroupSize as (value: string) => void}
-            remove={removeGroupSize}
-            placeholder="Up to 12 people"
-          />
-          <DynamicListField
-            name="language"
-            label="Primary Language"
-            fields={languageFields as Array<{ id: string }>}
-            append={appendLanguage as (value: string) => void}
-            remove={removeLanguage}
-            placeholder="Hindi"
-          />
-          <DynamicListField
-            name="guide"
-            label="Tour Guide Available"
-            fields={guideFields as Array<{ id: string }>}
-            append={appendGuide as (value: string) => void}
-            remove={removeGuide}
-            placeholder="Local expert guide"
-          />
+          <Field name="bestTime" label="Best Months to Go" />
+          <Field name="groupSize" label="Group Size limit" />
+          <Field name="language" label="Primary Language" />
+          <Field name="guide" label="Tour Guide Available" />
         </div>
       </Section>
 
@@ -835,23 +808,9 @@ const PackageForm: React.FC<{
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <TextArea name="address" label="Real-World Address" rows={2} />
           <TextArea name="mapUrl" label="iFrame src / Map URL" rows={2} />
-          <DynamicListField
-            name="travelBestTime"
-            label="Recommended Time of Year"
-            fields={travelBestTimeFields as Array<{ id: string }>}
-            append={appendTravelBestTime as (value: string) => void}
-            remove={removeTravelBestTime}
-            placeholder="October to February"
-          />
+          <Field name="travelBestTime" label="Recommended Time of Year" />
           <Field name="temperature" label="Average Temperature Range" />
-          <DynamicListField
-            name="clothing"
-            label="Clothing Advised"
-            fields={clothingFields as Array<{ id: string }>}
-            append={appendClothing as (value: string) => void}
-            remove={removeClothing}
-            placeholder="Warm jacket"
-          />
+          <Field name="clothing" label="Clothing Advised" />
         </div>
       </Section>
 
