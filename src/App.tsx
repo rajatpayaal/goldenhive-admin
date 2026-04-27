@@ -15,6 +15,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard/index'))
 const Packages = lazy(() => import('./pages/Packages'))
 const AddPackage = lazy(() => import('./pages/Packages/Add'))
 const EditPackage = lazy(() => import('./pages/Packages/Edit'))
+const PackageSorting = lazy(() => import('./pages/PackageSorting'))
 const PackagePricing = lazy(() => import('./pages/PackagePricing/index'))
 const AddPackagePricing = lazy(() => import('./pages/PackagePricing/Add'))
 const EditPackagePricing = lazy(() => import('./pages/PackagePricing/Edit'))
@@ -109,6 +110,7 @@ function App() {
                   <Route path="/packages" element={<Packages />} />
                   <Route path="/packages/new" element={<AddPackage />} />
                   <Route path="/packages/:id/edit" element={<EditPackage />} />
+                  <Route path="/package-sorting" element={<PackageSorting />} />
                   <Route path="/package-pricing" element={<PackagePricing />} />
                   <Route path="/package-pricing/new" element={<AddPackagePricing />} />
                   <Route path="/package-pricing/:id/edit" element={<EditPackagePricing />} />

@@ -44,7 +44,12 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     getDashboard({ days: 30, recentLimit: 8, topLimit: 5 })
       .then((res) => setData(res.data?.data || res.data))
-      .catch(() => toast.error('Failed to load dashboard'))
+      .catch((err: any) => {
+        const apiMessage = err?.response?.data?.message || err?.response?.data?.error
+        const status = err?.response?.status
+        const message = apiMessage || (status ? `Failed to load dashboard (${status})` : 'Failed to load dashboard')
+        toast.error(message)
+      })
       .finally(() => setLoading(false))
   }, [])
 

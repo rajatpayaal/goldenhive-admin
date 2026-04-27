@@ -29,6 +29,13 @@ export const API_ENDPOINTS = {
     bySlug: (slug: string) => `/packages/slug/${slug}`,
     status: (id: string) => `/packages/${id}/status`,
   },
+  packageSorting: {
+    root: '/package-sorting',
+    byId: (id: string) => `/package-sorting/${id}`,
+    order: (id: string) => `/package-sorting/${id}/order`,
+    category: (categoryId: string) => `/package-sorting/category/${categoryId}`,
+    miniSuggestions: '/package-sorting/mini-suggestions',
+  },
   packagePricing: {
     root: '/package-pricing',
     byId: (id: string) => `/package-pricing/${id}`,

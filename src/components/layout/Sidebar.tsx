@@ -32,6 +32,7 @@ import {
   ArrowDownToLine,
   Banknote,
   CarFront,
+  ArrowUpDown,
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import toast from 'react-hot-toast'
@@ -51,6 +52,7 @@ const navGroups = [
       { label: 'Users', to: '/users', icon: Users },
       { label: 'Bookings', to: '/bookings', icon: CalendarCheck },
       { label: 'Packages', to: '/packages', icon: Package },
+      { label: 'Package Sorting', to: '/package-sorting', icon: ArrowUpDown },
       { label: 'Package Pricing', to: '/package-pricing', icon: Banknote },
       { label: 'Vehicles', to: '/vehicles', icon: CarFront },
       { label: 'Countries', to: '/countries', icon: Navigation },

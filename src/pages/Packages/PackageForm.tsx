@@ -28,6 +28,7 @@ const schema = z.object({
   basePrice: z.coerce.number().min(0),
   discountPercent: z.coerce.number().min(0).max(100),
   currency: z.string().default('INR'),
+  sortOrder: z.coerce.number().min(1).optional(),
   tags: z.array(z.string()).optional(),
   heroTitle: z.string().optional(),
   heroSubtitle: z.string().optional(),
@@ -333,6 +334,7 @@ export const mapPackageToForm = (r: any): Partial<PackageFormData> => ({
   keywords: toStringArray(r.seo?.keywords),
   status: r.meta?.status || 'ACTIVE',
   itinerary: r.itinerary || [],
+  sortOrder: r.sortOrder,
   visibilityTagline: toBoolean(r.visibility?.tagline ?? r.visibilityTagline, true),
   visibilityPricing: toBoolean(r.visibility?.pricing ?? r.visibilityPricing, true),
   visibilityStats: toBoolean(r.visibility?.stats ?? r.visibilityStats, true),
@@ -373,6 +375,7 @@ const PackageForm: React.FC<{
       discountPercent: 0,
       currency: 'INR',
       status: 'ACTIVE',
+      sortOrder: undefined,
       whyChooseUs: [],
       highlights: [],
       inclusions: [],
@@ -612,6 +615,7 @@ const PackageForm: React.FC<{
           <Select name="countryId" label="Country" required options={countries} />
           <Select name="stateId" label="State" options={states} />
           <Select name="cityId" label="City" options={cities} />
+          <Field name="sortOrder" label="Sort Order" type="number" placeholder="e.g. 1" />
           <DynamicListField
             name="tags"
             label="Search Tags"

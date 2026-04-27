@@ -13,6 +13,13 @@ export const updatePackage = (id: string, data: FormData) =>
 export const deletePackage = (id: string) => api.delete(API_ENDPOINTS.packages.byId(id))
 export const patchPackageStatus = (id: string) => api.patch(API_ENDPOINTS.packages.status(id))
 
+export const fetchPackageSortingByCategory = (categoryId: string, params?: Record<string, unknown>) =>
+  api.get(API_ENDPOINTS.packageSorting.category(categoryId), { params })
+export const updatePackageSortOrder = (id: string, newOrder: number) =>
+  api.patch(API_ENDPOINTS.packageSorting.order(id), { newOrder: Math.trunc(Number(newOrder)) })
+export const fetchPackageSortingMiniSuggestions = (params?: { categoryId?: string; limit?: number }) =>
+  api.get(API_ENDPOINTS.packageSorting.miniSuggestions, { params })
+
 export const fetchPackagePricing = (params?: Record<string, unknown>) => api.get(API_ENDPOINTS.packagePricing.root, { params })
 export const fetchPackagePricingById = (id: string) => api.get(API_ENDPOINTS.packagePricing.byId(id))
 export const createPackagePricing = (data: object) => api.post(API_ENDPOINTS.packagePricing.root, data)
@@ -55,8 +62,16 @@ export const fetchNotifications = (params?: Record<string, unknown>) => api.get(
 export const markNotiRead = (id: string) => api.patch(API_ENDPOINTS.notifications.markRead(id))
 export const markAllNotiRead = () => api.patch(API_ENDPOINTS.notifications.markAllRead)
 
-export const loginAdmin = (email: string, password: string) =>
-  api.post(API_ENDPOINTS.auth.adminLogin, { email, password })
+export const loginAdmin = async (email: string, password: string) => {
+  try {
+    return await api.post(API_ENDPOINTS.auth.adminLogin, { email, password })
+  } catch (error: any) {
+    if (error?.response?.status === 404) {
+      return api.post(API_ENDPOINTS.auth.login, { email, password })
+    }
+    throw error
+  }
+}
 
 export const fetchCountries = () => api.get(API_ENDPOINTS.countries.root)
 export const fetchCountryById = (id: string) => api.get(API_ENDPOINTS.countries.byId(id))

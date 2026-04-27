@@ -557,6 +557,24 @@ const PackagesPage: React.FC = () => {
       ),
     },
     { header: 'Destination Node', render: (r: any) => <span className="text-text-tertiary">{r.basic?.destination}</span> },
+    {
+      header: 'Sort Order',
+      render: (r: any) => {
+        const order = Number(r.sortOrder)
+        const isValid = Number.isFinite(order) && order > 0
+        return (
+          <span
+            className={`inline-flex min-w-14 items-center justify-center rounded-lg px-2 py-1 text-xs font-semibold ${
+              isValid
+                ? 'bg-success-500/10 text-success-500'
+                : 'bg-warning-500/10 text-warning-500'
+            }`}
+          >
+            {isValid ? Math.trunc(order) : 'Missing'}
+          </span>
+        )
+      },
+    },
     { header: 'Cycle',    render: (r: any) => <span>{r.basic?.durationDays}D/{r.basic?.nights}N</span> },
     {
       header: 'Valuation',
