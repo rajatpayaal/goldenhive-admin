@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "http://13.206.107.203/api/$1"
+      "destination": "https://api.goldenhiveholidays.in/$1"
     },
     {
       "source": "/(.*)",
