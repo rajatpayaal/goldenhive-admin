@@ -63,6 +63,9 @@ export const deleteBookingById = async (id: string) => {
 export const listPackages = (params?: Record<string, unknown>) =>
   api.get(API_ENDPOINTS.packages.root, { params })
 
+export const listFaqs = (params?: Record<string, unknown>) =>
+  api.get(API_ENDPOINTS.faqs.root, { params })
+
 export const createPackageByForm = (formData: FormData) =>
   api.post(API_ENDPOINTS.packages.root, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
 
@@ -204,8 +207,17 @@ export const getAboutUsById = (id: string) =>
 export const createAboutUs = (payload: FormData) =>
   api.post(API_ENDPOINTS.aboutUs.root, payload, { headers: { 'Content-Type': 'multipart/form-data' } })
 
-export const updateAboutUs = (id: string, payload: FormData) =>
-  api.put(API_ENDPOINTS.aboutUs.byId(id), payload, { headers: { 'Content-Type': 'multipart/form-data' } })
+export const updateAboutUs = async (id: string, payload: FormData) => {
+  const config = { headers: { 'Content-Type': 'multipart/form-data' } }
+  try {
+    return await api.put(API_ENDPOINTS.aboutUs.byId(id), payload, config)
+  } catch (error: any) {
+    if ([404, 405].includes(error?.response?.status)) {
+      return api.put(API_ENDPOINTS.aboutUs.root, payload, config)
+    }
+    throw error
+  }
+}
 
 export const deleteAboutUs = (id: string) =>
   api.delete(API_ENDPOINTS.aboutUs.byId(id))

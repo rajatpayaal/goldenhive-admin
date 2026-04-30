@@ -9,10 +9,10 @@ const AddPackagePage: React.FC = () => {
   const [saving, setSaving] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: PackageFormData, primaryImage?: File, gallery?: File[]) => {
+  const handleSubmit = async (data: PackageFormData, primaryImage?: File, gallery?: File[], existingGallery?: any[]) => {
     setSaving(true)
     try {
-      const formData = buildPackageFormData(data, primaryImage, gallery)
+      const formData = buildPackageFormData(data, primaryImage, gallery, existingGallery)
       await createPackage(formData)
       toast.success('Package created successfully!')
       navigate('/packages')

@@ -27,11 +27,11 @@ const EditPackagePage: React.FC = () => {
       .finally(() => setLoading(false))
   }, [id, navigate])
 
-  const handleSubmit = async (data: PackageFormData, primaryImage?: File, gallery?: File[]) => {
+  const handleSubmit = async (data: PackageFormData, primaryImage?: File, gallery?: File[], existingGallery?: any[]) => {
     if (!id) return
     setSaving(true)
     try {
-      const formData = buildPackageFormData(data, primaryImage, gallery)
+      const formData = buildPackageFormData(data, primaryImage, gallery, existingGallery)
       await updatePackage(id, formData)
       toast.success('Package updated successfully!')
       navigate('/packages')

@@ -4,6 +4,7 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
+  listFaqs,
 } from '../../services/adminPanel.service'
 
 export {
@@ -12,4 +13,5 @@ export {
   createBlog,
   updateBlog,
   deleteBlog,
+  listFaqs,
 }

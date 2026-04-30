@@ -57,15 +57,8 @@ const EditAboutUsPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-      <PageHeader
-        title="Edit About Us"
-        subtitle="Update the singleton About Us schema"
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'About Us', href: '/about-us' }, { label: 'Edit' }]}
-      />
-      <div className="rounded-3xl border border-surface-border bg-surface-card p-4 shadow-sm">
-        <AboutUsForm defaultValues={item || {}} saving={saving} submitLabel="Serialize Logic to Backend" onSubmit={onSubmit} />
-      </div>
+    <div className="px-4 py-6 sm:px-6 lg:px-8">
+      <AboutUsForm defaultValues={item || {}} saving={saving} submitLabel="Save Changes" onSubmit={onSubmit} />
     </div>
   )
 }
