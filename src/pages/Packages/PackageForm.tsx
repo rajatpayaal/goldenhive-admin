@@ -795,6 +795,17 @@ const PackageForm: React.FC<{
         </Section>
 
       </div>
+
+      {/* ACTION BUTTONS */}
+      <div className="lg:col-span-12 flex justify-end gap-4 pt-6 pb-12 mt-4 border-t border-surface-border">
+        <button type="button" onClick={() => window.history.back()} className="btn-secondary px-6 py-2.5 rounded-xl border border-surface-border hover:bg-surface-hover font-semibold text-sm transition-all">
+          Cancel
+        </button>
+        <button type="submit" disabled={saving} className="btn-primary px-8 py-2.5 rounded-xl bg-brand-500 text-white font-semibold text-sm hover:bg-brand-600 shadow-lg shadow-brand-500/25 transition-all disabled:opacity-50">
+          {saving ? 'Saving...' : 'Save Package'}
+        </button>
+      </div>
+
     </form>
   )
 }
