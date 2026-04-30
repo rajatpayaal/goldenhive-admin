@@ -154,6 +154,7 @@ const BlogForm: React.FC<BlogFormProps> = ({ defaultValues, saving, onSubmit }) 
       sections: [
         ...p.sections,
         {
+          sectionId: `sec_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 7)}`,
           title: '',
           content: '',
           type: 'TextBody',
@@ -285,8 +286,13 @@ const BlogForm: React.FC<BlogFormProps> = ({ defaultValues, saving, onSubmit }) 
                   <div>
                     <label className="label">Type</label>
                     <select className="input" value={section.type} onChange={e => updateSection(sIdx, 'type', e.target.value)}>
+                      <option value="Hero">Hero</option>
+                      <option value="Stats">Stats</option>
+                      <option value="Offerings">Offerings</option>
+                      <option value="Process">Process</option>
+                      <option value="Tips">Tips</option>
+                      <option value="SuccessSnapshot">SuccessSnapshot</option>
                       <option value="TextBody">TextBody</option>
-                      <option value="Gallery">Gallery</option>
                     </select>
                   </div>
                   <div>

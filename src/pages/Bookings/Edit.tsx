@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { PageHeader, Spinner } from '../../components/ui'
 import BookingForm, { BookingFormData } from './BookingForm'
-import { getBookingById, updateBookingById } from './service'
+import { getBookingById, updateBookingStatusById } from './service'
 
 const EditBookingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -45,13 +45,14 @@ const EditBookingPage: React.FC = () => {
     if (!id) return
     setSaving(true)
     try {
-      const fd = new FormData()
-      fd.append('status', data.status)
-      fd.append('paymentStatus', data.paymentStatus)
-      fd.append('totalAmount', String(data.totalAmount))
-      fd.append('note', data.note)
+      const payload = {
+        status: data.status,
+        paymentStatus: data.paymentStatus,
+        totalAmount: data.totalAmount,
+        note: data.note,
+      }
 
-      await updateBookingById(id, fd)
+      await updateBookingStatusById(id, payload)
       toast.success('Booking updated')
       navigate('/bookings')
     } catch (error: any) {

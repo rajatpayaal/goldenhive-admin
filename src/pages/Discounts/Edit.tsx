@@ -31,10 +31,12 @@ const EditDiscountPage: React.FC = () => {
     if (!item) return {}
     return {
       code: item.code || '',
-      type: item.type || 'PERCENT',
+      packageId: item.packageId || '',
+      discountType: item.discountType || 'percent',
       value: Number(item.value || 0),
-      minAmount: Number(item.minAmount || 0),
-      maxDiscount: Number(item.maxDiscount || 0),
+      minPax: Number(item.minPax || 1),
+      startDate: item.startDate ? String(item.startDate).slice(0, 16) : '',
+      endDate: item.endDate ? String(item.endDate).slice(0, 16) : '',
       isActive: Boolean(item.isActive ?? true),
     }
   }, [item])

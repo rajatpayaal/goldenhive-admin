@@ -62,7 +62,9 @@ const BlogsPage: React.FC = () => {
             )}
             <div>
               <p className="line-clamp-1 max-w-[300px] font-semibold text-text-primary">{row.title || 'Untitled'}</p>
-              <p className="text-[11px] capitalize text-text-secondary">{row.category} • {row.author}</p>
+              <p className="text-[11px] capitalize text-text-secondary">
+                {row.category} • {row.userId ? `${row.userId.firstName || ''} ${row.userId.lastName || ''}`.trim() || row.userId.email : row.author}
+              </p>
             </div>
           </div>
         ),

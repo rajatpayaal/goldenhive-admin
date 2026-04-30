@@ -4,6 +4,7 @@ import {
   getBookingById,
   listBookings,
   updateBookingById,
+  updateBookingStatusById,
 } from '../../services/adminPanel.service'
 
 export {
@@ -11,5 +12,6 @@ export {
   getBookingById,
   createBooking,
   updateBookingById,
+  updateBookingStatusById,
   deleteBookingById,
 }

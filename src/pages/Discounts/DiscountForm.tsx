@@ -3,19 +3,23 @@ import { Toggle } from '../../components/ui'
 
 export type DiscountFormData = {
   code: string
-  type: 'PERCENT' | 'FLAT'
+  packageId?: string
+  minPax: number
+  discountType: 'percent' | 'flat'
   value: number
-  minAmount: number
-  maxDiscount: number
+  startDate?: string
+  endDate?: string
   isActive: boolean
 }
 
 const defaultFormData: DiscountFormData = {
   code: '',
-  type: 'PERCENT',
+  packageId: '',
+  minPax: 1,
+  discountType: 'percent',
   value: 10,
-  minAmount: 0,
-  maxDiscount: 0,
+  startDate: '',
+  endDate: '',
   isActive: true,
 }
 
@@ -34,7 +38,12 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ defaultValues, saving, onSu
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await onSubmit(form)
+    // Handle optional fields
+    const dataToSubmit = { ...form }
+    if (!dataToSubmit.packageId) delete dataToSubmit.packageId
+    if (!dataToSubmit.startDate) delete dataToSubmit.startDate
+    if (!dataToSubmit.endDate) delete dataToSubmit.endDate
+    await onSubmit(dataToSubmit)
   }
 
   return (
@@ -47,6 +56,17 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ defaultValues, saving, onSu
             value={form.code}
             onChange={(e) => setForm((p) => ({ ...p, code: e.target.value.toUpperCase() }))}
             placeholder="WELCOME10"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="label">Package ID (Optional)</label>
+          <input
+            className="input"
+            value={form.packageId || ''}
+            onChange={(e) => setForm((p) => ({ ...p, packageId: e.target.value }))}
+            placeholder="Specific Package ID"
           />
         </div>
 
@@ -54,11 +74,11 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ defaultValues, saving, onSu
           <label className="label">Type</label>
           <select
             className="input"
-            value={form.type}
-            onChange={(e) => setForm((p) => ({ ...p, type: e.target.value as DiscountFormData['type'] }))}
+            value={form.discountType}
+            onChange={(e) => setForm((p) => ({ ...p, discountType: e.target.value as DiscountFormData['discountType'] }))}
           >
-            <option value="PERCENT">PERCENT</option>
-            <option value="FLAT">FLAT</option>
+            <option value="percent">PERCENT</option>
+            <option value="flat">FLAT</option>
           </select>
         </div>
 
@@ -74,24 +94,33 @@ const DiscountForm: React.FC<DiscountFormProps> = ({ defaultValues, saving, onSu
         </div>
 
         <div>
-          <label className="label">Min Amount</label>
+          <label className="label">Min Pax</label>
           <input
             type="number"
             className="input"
-            value={form.minAmount}
-            min={0}
-            onChange={(e) => setForm((p) => ({ ...p, minAmount: Number(e.target.value || 0) }))}
+            value={form.minPax}
+            min={1}
+            onChange={(e) => setForm((p) => ({ ...p, minPax: Number(e.target.value || 1) }))}
           />
         </div>
 
         <div>
-          <label className="label">Max Discount</label>
+          <label className="label">Start Date</label>
           <input
-            type="number"
+            type="datetime-local"
             className="input"
-            value={form.maxDiscount}
-            min={0}
-            onChange={(e) => setForm((p) => ({ ...p, maxDiscount: Number(e.target.value || 0) }))}
+            value={form.startDate || ''}
+            onChange={(e) => setForm((p) => ({ ...p, startDate: e.target.value }))}
+          />
+        </div>
+
+        <div>
+          <label className="label">End Date</label>
+          <input
+            type="datetime-local"
+            className="input"
+            value={form.endDate || ''}
+            onChange={(e) => setForm((p) => ({ ...p, endDate: e.target.value }))}
           />
         </div>
       </div>

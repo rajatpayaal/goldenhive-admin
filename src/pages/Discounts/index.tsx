@@ -54,8 +54,8 @@ const DiscountsPage: React.FC = () => {
         header: 'Rule',
         render: (row: any) => (
           <div>
-            <p className="text-text-primary">{row.type === 'FLAT' ? `Flat ₹${row.value}` : `${row.value}% off`}</p>
-            <p className="text-xs text-text-tertiary">Min: ₹{row.minAmount || 0}</p>
+            <p className="text-text-primary">{row.discountType === 'flat' ? `Flat ₹${row.value}` : `${row.value}% off`}</p>
+            <p className="text-xs text-text-tertiary">Min Pax: {row.minPax || 1}</p>
           </div>
         ),
       },
